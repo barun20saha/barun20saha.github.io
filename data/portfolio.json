@@ -1,0 +1,213 @@
+{
+  "profile": {
+    "name": "Barun Saha",
+    "tagline": "B.Tech CSE Student | Systems & Full-Stack Developer",
+    "photo": "assets/img/profile.svg",
+    "location": "Kolkata, West Bengal, India",
+    "bio": "Third-year Computer Science and Engineering undergraduate passionate about building scalable web applications, distributed systems, and solving algorithmic challenges. Constantly exploring low-level systems and developer tools.",
+    "resumeUrl": "assets/files/resume.pdf",
+    "status": "Open to Software Engineering Internships (Summer 2027 / 2026)",
+    "socials": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/barun20saha",
+        "username": "barun20saha"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/barun-saha",
+        "username": "barun-saha"
+      },
+      {
+        "platform": "LeetCode",
+        "url": "https://leetcode.com/barun20",
+        "username": "barun20"
+      },
+      {
+        "platform": "Codeforces",
+        "url": "https://codeforces.com/profile/barun20",
+        "username": "barun20"
+      },
+      {
+        "platform": "Email",
+        "url": "mailto:barunsaha.dev@gmail.com",
+        "username": "barunsaha.dev@gmail.com"
+      }
+    ]
+  },
+  "education": [
+    {
+      "degree": "B.Tech in Computer Science & Engineering",
+      "institute": "Heritage Institute of Technology, Kolkata",
+      "years": "2023 – 2027",
+      "score": "CGPA: 8.78 / 10.0",
+      "details": "Coursework: Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems, Operating Systems, Computer Architecture, Computer Networks."
+    },
+    {
+      "degree": "Higher Secondary Certificate (Class XII)",
+      "institute": "Kolkata Model Senior Secondary School",
+      "years": "2021 – 2023",
+      "score": "Percentage: 94.2%",
+      "details": "Major: Physics, Chemistry, Mathematics, Computer Science."
+    }
+  ],
+  "skills": {
+    "languages": ["C", "C++", "Python", "Java", "JavaScript", "TypeScript", "Go", "SQL"],
+    "webDev": ["React.js", "Node.js", "Express.js", "Next.js", "RESTful APIs", "HTML5", "CSS3 / Sass"],
+    "databases": ["PostgreSQL", "MySQL", "MongoDB", "Redis"],
+    "toolsPlatforms": ["Git", "GitHub", "Linux (Bash)", "Docker", "Postman", "VS Code", "Vercel"],
+    "coreCS": ["Data Structures & Algorithms", "System Design (Basics)", "OOP", "DBMS", "Operating Systems", "Computer Networks"]
+  },
+  "projects": [
+    {
+      "title": "HyperLog — Distributed Log Aggregator",
+      "description": "A high-throughput distributed log streaming engine and parser in Go with persistent disk buffering, WebSocket realtime broadcasting, and sub-millisecond query latency.",
+      "tech": ["Go", "WebSockets", "Redis", "Docker", "React"],
+      "githubUrl": "https://github.com/barun20saha/hyperlog",
+      "liveUrl": "https://hyperlog-demo.vercel.app",
+      "image": "assets/img/projects/hyperlog.svg",
+      "featured": true
+    },
+    {
+      "title": "DevBoard — Collaborative Engineering Canvas",
+      "description": "Full-stack real-time virtual canvas and code snippet workspace for engineering teams with CRDT-based conflict resolution, granular permission trees, and room audio chat.",
+      "tech": ["TypeScript", "Next.js", "Node.js", "Socket.io", "PostgreSQL"],
+      "githubUrl": "https://github.com/barun20saha/devboard",
+      "liveUrl": "https://devboard-collab.vercel.app",
+      "image": "assets/img/projects/devboard.svg",
+      "featured": true
+    },
+    {
+      "title": "CodeJudge — Microservices Sandboxed Code Runner",
+      "description": "Isolated remote code execution system running user-submitted untrusted C++/Python scripts inside secure Docker containers with strict CPU/memory limits and automated test suite evaluation.",
+      "tech": ["Python", "FastAPI", "Docker", "RabbitMQ", "Redis"],
+      "githubUrl": "https://github.com/barun20saha/codejudge",
+      "liveUrl": "",
+      "image": "assets/img/projects/codejudge.svg",
+      "featured": false
+    },
+    {
+      "title": "QueryCraft — Visual SQL Query Builder & Optimizer",
+      "description": "Interactive web-based SQL generator and query visualizer that renders relational algebra trees, explains execution plans, and benchmarks query performance.",
+      "tech": ["React", "CSS3", "Node.js", "PostgreSQL"],
+      "githubUrl": "https://github.com/barun20saha/querycraft",
+      "liveUrl": "https://querycraft.vercel.app",
+      "image": "assets/img/projects/querycraft.svg",
+      "featured": false
+    }
+  ],
+  "experience": [
+    {
+      "role": "Software Engineering Intern",
+      "org": "Nexus Software Labs",
+      "duration": "Jun 2026 – Aug 2026",
+      "location": "Kolkata (Hybrid)",
+      "description": "Engineered asynchronous event processing pipelines using Node.js and Redis, cutting background job latency by 32%. Developed and documented 15+ secure RESTful API endpoints with JWT auth and rate limiting."
+    },
+    {
+      "role": "Open Source Contributor & Maintainer",
+      "org": "Developer Student Clubs",
+      "duration": "Sep 2024 – Present",
+      "location": "Campus Community",
+      "description": "Mentored 120+ first- and second-year students in Git workflows, competitive programming basics, and full-stack web development. Maintained the club's event registration portal."
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Global Rank 412 / 18,000+ in LeetCode Weekly Contest 398",
+      "date": "2026-04",
+      "link": "https://leetcode.com/contest"
+    },
+    {
+      "title": "Winner — HackHeritage 36-Hour Hackathon (Systems & Tools Track)",
+      "date": "2025-11",
+      "link": ""
+    },
+    {
+      "title": "Qualified for ACM-ICPC Amritapuri Regional Preliminary Contest",
+      "date": "2025-10",
+      "link": ""
+    },
+    {
+      "title": "Top 5% in Google Girl Hackathon / HashCode Challenge",
+      "date": "2025-03",
+      "link": ""
+    }
+  ],
+  "certifications": [
+    {
+      "title": "AWS Certified Cloud Practitioner (CLF-C02)",
+      "issuer": "Amazon Web Services",
+      "date": "2026-01",
+      "link": "https://aws.amazon.com/verification"
+    },
+    {
+      "title": "Meta Front-End Developer Professional Certificate",
+      "issuer": "Coursera / Meta",
+      "date": "2025-07",
+      "link": "https://coursera.org/verify/professional-cert"
+    },
+    {
+      "title": "PostgreSQL for Everybody Specialization",
+      "issuer": "University of Michigan (Coursera)",
+      "date": "2024-12",
+      "link": ""
+    }
+  ],
+  "codingProfiles": [
+    {
+      "platform": "LeetCode",
+      "handle": "barun20",
+      "stats": "500+ Solved • Knight (Rating 1940+)",
+      "url": "https://leetcode.com/barun20"
+    },
+    {
+      "platform": "Codeforces",
+      "handle": "barun20",
+      "stats": "Specialist (Peak Rating 1485)",
+      "url": "https://codeforces.com/profile/barun20"
+    },
+    {
+      "platform": "GitHub",
+      "handle": "barun20saha",
+      "stats": "40+ Repositories • 650+ Contributions",
+      "url": "https://github.com/barun20saha"
+    },
+    {
+      "platform": "GeeksforGeeks",
+      "handle": "barun20saha",
+      "stats": "250+ Solved • Institute Rank 4",
+      "url": "https://auth.geeksforgeeks.org/user/barun20saha"
+    }
+  ],
+  "extracurricular": [
+    {
+      "title": "Technical Lead, Campus Coding Society",
+      "duration": "2025 – Present",
+      "description": "Organized 8 algorithmic problem-solving contests and weekly peer study circles covering graph algorithms and dynamic programming."
+    },
+    {
+      "title": "Lead Organizer, TechFest Hackathon 2025",
+      "duration": "2025",
+      "description": "Coordinated sponsor relations, problem statement tracks, and judging platform logistics for 350+ participating students."
+    }
+  ],
+  "news": [
+    {
+      "date": "2026-08-15",
+      "text": "Completed my Summer Software Engineering Internship at Nexus Software Labs!"
+    },
+    {
+      "date": "2026-05-02",
+      "text": "Achieved Knight badge on LeetCode with contest rating crossing 1900+."
+    },
+    {
+      "date": "2026-01-20",
+      "text": "Cleared the AWS Certified Cloud Practitioner exam."
+    },
+    {
+      "date": "2025-11-12",
+      "text": "Built HyperLog and secured 1st prize at HackHeritage 2025."
+    }
+  ]
+}

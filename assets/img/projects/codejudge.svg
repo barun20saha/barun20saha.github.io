@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+  <rect width="600" height="360" fill="#14171F"/>
+  <rect x="20" y="20" width="560" height="320" rx="8" fill="#1B2430" stroke="#2BB3A3" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect x="20" y="20" width="560" height="36" rx="8" fill="#242D3C"/>
+  <circle cx="45" cy="38" r="5" fill="#FF5F56"/>
+  <circle cx="62" cy="38" r="5" fill="#FFBD2E"/>
+  <circle cx="79" cy="38" r="5" fill="#27C93F"/>
+  <text x="300" y="42" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">codejudge-sandbox-worker</text>
+  
+  <text x="50" y="95" fill="#2BB3A3" font-family="'JetBrains Mono', monospace" font-size="13">$ docker run --cpus=0.5 --memory=128m sandbox/runner:latest</text>
+  <text x="50" y="125" fill="#FFFFFF" font-family="'JetBrains Mono', monospace" font-size="12">[Test Case 1] Input: n=10^5, k=42 ... PASS (14ms, 12.4MB)</text>
+  <text x="50" y="150" fill="#FFFFFF" font-family="'JetBrains Mono', monospace" font-size="12">[Test Case 2] Input: Large Graph Traversal ... PASS (88ms, 38.1MB)</text>
+  <text x="50" y="175" fill="#E8A33D" font-family="'JetBrains Mono', monospace" font-size="12">[Verdict] ACCEPTED — Execution Score: 100/100</text>
+  <text x="50" y="205" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="11">Queue: RabbitMQ [worker-04] | Redis caching enabled</text>
+
+  <rect x="50" y="235" width="500" height="80" rx="6" fill="#14171F" stroke="#3A4659" stroke-width="1"/>
+  <text x="70" y="268" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-size="16" font-weight="bold">CodeJudge — Sandboxed Code Runner</text>
+  <text x="70" y="292" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="12">Python • FastAPI • Docker cgroups • RabbitMQ • Redis</text>
+</svg>

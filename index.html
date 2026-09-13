@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Barun Saha | B.Tech CSE Portfolio</title>
+  <meta name="description" content="Personal portfolio and software engineering projects of Barun Saha, B.Tech CSE undergraduate.">
+  <meta name="author" content="Barun Saha">
+  
+  <!-- Open Graph / Social Sharing Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Barun Saha — Software Engineering Portfolio">
+  <meta property="og:description" content="Personal portfolio and engineering projects of Barun Saha.">
+  <meta property="og:image" content="assets/img/profile.svg">
+
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+
+  <!-- Google Fonts: Space Grotesk (Headings), Inter (Body), JetBrains Mono (Terminal/Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Sticky Top Navigation -->
+  <header class="site-nav">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-link" aria-label="Home">
+        <span class="brand-prompt">&gt;_</span>
+        <span>barun.saha</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#experience" class="nav-link">Experience</a></li>
+          <li><a href="#education" class="nav-link">Education</a></li>
+          <li><a href="#achievements" class="nav-link">Achievements</a></li>
+          <li><a href="#profiles" class="nav-link">Profiles</a></li>
+          <li><a href="#news" class="nav-link">News</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Loading & Error Fallbacks -->
+  <div class="container">
+    <div id="loading-indicator" class="loading-indicator" role="status" aria-live="polite">
+      <div class="loading-spinner"></div>
+      <p style="font-family: var(--font-mono); color: var(--muted); font-size: 0.9rem;">$ loading profile data...</p>
+    </div>
+
+    <div id="error-message" class="error-message" style="display: none;" role="alert">
+      <h3>Failed to load portfolio data</h3>
+      <p class="error-details"></p>
+      <p style="margin-top: 12px; font-size: 0.85rem;">Please check if <code>data/portfolio.json</code> exists and is valid JSON.</p>
+    </div>
+  </div>
+
+  <!-- Main Dynamic Site Content -->
+  <main id="main-content" class="site-main" style="display: none;">
+    
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-grid">
+        
+        <!-- Terminal Window Simulation -->
+        <div class="terminal-window" aria-label="Simulated Terminal Intro">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-yellow"></span>
+              <span class="terminal-dot dot-green"></span>
+            </div>
+            <div class="terminal-title">barun@archlinux: ~ (zsh)</div>
+            <div style="width: 42px;"></div>
+          </div>
+          <div id="terminal-content" class="terminal-body">
+            <!-- Injected via JavaScript typer -->
+          </div>
+        </div>
+
+        <!-- Hero Profile Action Card -->
+        <div class="hero-action-card">
+          <div class="hero-profile-snippet">
+            <img id="hero-avatar" class="hero-avatar" src="assets/img/profile.svg" alt="Barun Saha">
+            <div class="hero-name-group">
+              <h1 id="hero-name">Barun Saha</h1>
+              <div>
+                <span id="hero-status" class="hero-status-pill">Open to Opportunities</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-cta-group">
+            <a id="hero-resume-btn" href="assets/files/resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              View Resume
+            </a>
+            <div id="hero-socials" class="hero-socials" style="display: flex; gap: 8px;">
+              <!-- Social icons injected via JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 01. Overview</span>
+          <h2>About Me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-card">
+            <p id="about-bio-text" class="about-bio"></p>
+          </div>
+          <div class="quick-facts-card">
+            <ul id="quick-facts-list" class="quick-facts-list">
+              <!-- Facts injected via JS -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 02. Technical Arsenal</span>
+          <h2>Skills &amp; Technologies</h2>
+          <p>Grouped domains of expertise and core computer science competencies.</p>
+        </div>
+        <div id="skills-grid" class="skills-grid">
+          <!-- Clustered tags injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 03. Engineering Portfolio</span>
+          <h2>Featured Projects</h2>
+          <p>Selected systems, full-stack applications, and developer tools built from scratch.</p>
+        </div>
+        <div id="projects-grid" class="projects-grid">
+          <!-- Project cards injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 04. Career</span>
+          <h2>Experience &amp; Leadership</h2>
+        </div>
+        <div id="experience-timeline" class="timeline">
+          <!-- Experience timeline injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 05. Academics</span>
+          <h2>Education</h2>
+        </div>
+        <div id="education-timeline" class="timeline">
+          <!-- Education items injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements & Certifications Section -->
+    <section id="achievements" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 06. Recognition</span>
+          <h2>Achievements &amp; Certifications</h2>
+        </div>
+        <div class="creds-grid">
+          <div class="creds-column">
+            <h3 class="creds-column-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+              Key Milestones
+            </h3>
+            <div id="achievements-list" class="creds-column">
+              <!-- Achievements injected via JS -->
+            </div>
+          </div>
+
+          <div class="creds-column">
+            <h3 class="creds-column-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              Certifications &amp; Training
+            </h3>
+            <div id="certifications-list" class="creds-column">
+              <!-- Certifications injected via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coding Profiles Section -->
+    <section id="profiles" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 07. Online Handles</span>
+          <h2>Coding &amp; Developer Profiles</h2>
+          <p>Live problem-solving track records and open source repository activity.</p>
+        </div>
+        <div id="coding-profiles-grid" class="coding-profiles-grid">
+          <!-- Coding profile stat cards injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Extracurricular Section -->
+    <section id="extracurricular-section" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 08. Community</span>
+          <h2>Extracurricular Activities</h2>
+        </div>
+        <div id="extracurricular-list">
+          <!-- Extracurricular items injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- News / Timeline Section -->
+    <section id="news" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">// 09. Chronological Log</span>
+          <h2>News &amp; Updates</h2>
+        </div>
+        <div class="about-card">
+          <div id="news-list">
+            <!-- News items injected via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span id="footer-name">Barun Saha</span>
+        </div>
+        <div id="footer-socials" class="footer-socials">
+          <!-- Social links injected via JS -->
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>&copy; <span id="footer-copyright-year">2026</span> Barun Saha. Built with clean HTML, CSS &amp; vanilla JS.</div>
+        <div class="admin-panel-badge" title="Local content manager tool">
+          ⚙️ Content managed via local admin panel
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

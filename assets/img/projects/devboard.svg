@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+  <rect width="600" height="360" fill="#14171F"/>
+  <rect x="20" y="20" width="560" height="320" rx="8" fill="#1B2430" stroke="#2BB3A3" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect x="20" y="20" width="560" height="36" rx="8" fill="#242D3C"/>
+  <circle cx="45" cy="38" r="5" fill="#FF5F56"/>
+  <circle cx="62" cy="38" r="5" fill="#FFBD2E"/>
+  <circle cx="79" cy="38" r="5" fill="#27C93F"/>
+  <text x="300" y="42" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">devboard-canvas.tsx</text>
+  
+  <!-- Canvas mockup -->
+  <rect x="50" y="75" width="230" height="150" rx="6" fill="#14171F" stroke="#2BB3A3" stroke-width="1"/>
+  <text x="65" y="105" fill="#2BB3A3" font-family="'JetBrains Mono', monospace" font-size="12">// CRDT State Tree</text>
+  <rect x="65" y="120" width="120" height="20" rx="3" fill="#242D3C"/>
+  <rect x="65" y="150" width="180" height="20" rx="3" fill="#242D3C"/>
+  <circle cx="210" cy="180" r="10" fill="#E8A33D"/>
+  <text x="228" y="184" fill="#E8A33D" font-family="'JetBrains Mono', monospace" font-size="10">Barun (cursor)</text>
+  
+  <rect x="300" y="75" width="250" height="150" rx="6" fill="#14171F" stroke="#3A4659" stroke-width="1"/>
+  <text x="315" y="105" fill="#E8A33D" font-family="'JetBrains Mono', monospace" font-size="12">Active Peers (3)</text>
+  <text x="315" y="130" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="11">● User 1: editing /auth/jwt.ts</text>
+  <text x="315" y="150" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="11">● User 2: drawing schema graph</text>
+  <text x="315" y="170" fill="#2BB3A3" font-family="'JetBrains Mono', monospace" font-size="11">● Audio stream: 48kHz stereo</text>
+
+  <rect x="50" y="245" width="500" height="70" rx="6" fill="#14171F" stroke="#3A4659" stroke-width="1"/>
+  <text x="70" y="275" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-size="16" font-weight="bold">DevBoard — Collaborative Engineering Canvas</text>
+  <text x="70" y="295" fill="#8E9AA8" font-family="'JetBrains Mono', monospace" font-size="12">Next.js • Socket.io • PostgreSQL • Realtime CRDT</text>
+</svg>
