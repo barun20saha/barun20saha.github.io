@@ -2,7 +2,7 @@
   "profile": {
     "name": "Barun Saha",
     "tagline": "B.Tech CSE Student | Systems & Full-Stack Developer",
-    "photo": "assets/img/profile.svg",
+    "photo": "assets/img/B_sphoto-1789478569220-5939.jpg",
     "location": "Kolkata, West Bengal, India",
     "bio": "Third-year Computer Science and Engineering undergraduate passionate about building scalable web applications, distributed systems, and solving algorithmic challenges. Constantly exploring low-level systems and developer tools.",
     "resumeUrl": "assets/files/resume.pdf",
@@ -15,7 +15,7 @@
       },
       {
         "platform": "LinkedIn",
-        "url": "https://linkedin.com/in/barun-saha",
+        "url": "https://www.linkedin.com/in/barun-saha-132312380/",
         "username": "barun-saha"
       },
       {
@@ -24,13 +24,8 @@
         "username": "barun20"
       },
       {
-        "platform": "Codeforces",
-        "url": "https://codeforces.com/profile/barun20",
-        "username": "barun20"
-      },
-      {
         "platform": "Email",
-        "url": "mailto:barunsaha.dev@gmail.com",
+        "url": "barun20.saha@gmail.com",
         "username": "barunsaha.dev@gmail.com"
       }
     ]
@@ -38,31 +33,74 @@
   "education": [
     {
       "degree": "B.Tech in Computer Science & Engineering",
-      "institute": "Heritage Institute of Technology, Kolkata",
-      "years": "2023 – 2027",
+      "institute": "Adamas University",
+      "years": "2024 - 2028",
       "score": "CGPA: 8.78 / 10.0",
       "details": "Coursework: Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems, Operating Systems, Computer Architecture, Computer Networks."
     },
     {
       "degree": "Higher Secondary Certificate (Class XII)",
-      "institute": "Kolkata Model Senior Secondary School",
+      "institute": "Saint Paul's School",
       "years": "2021 – 2023",
-      "score": "Percentage: 94.2%",
+      "score": "74.5%",
       "details": "Major: Physics, Chemistry, Mathematics, Computer Science."
     }
   ],
   "skills": {
-    "languages": ["C", "C++", "Python", "Java", "JavaScript", "TypeScript", "Go", "SQL"],
-    "webDev": ["React.js", "Node.js", "Express.js", "Next.js", "RESTful APIs", "HTML5", "CSS3 / Sass"],
-    "databases": ["PostgreSQL", "MySQL", "MongoDB", "Redis"],
-    "toolsPlatforms": ["Git", "GitHub", "Linux (Bash)", "Docker", "Postman", "VS Code", "Vercel"],
-    "coreCS": ["Data Structures & Algorithms", "System Design (Basics)", "OOP", "DBMS", "Operating Systems", "Computer Networks"]
+    "languages": [
+      "C",
+      "C++",
+      "Python",
+      "Java",
+      "JavaScript",
+      "TypeScript",
+      "Go",
+      "SQL"
+    ],
+    "webDev": [
+      "React.js",
+      "Node.js",
+      "Express.js",
+      "Next.js",
+      "RESTful APIs",
+      "HTML5",
+      "CSS3 / Sass"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Redis"
+    ],
+    "toolsPlatforms": [
+      "Git",
+      "GitHub",
+      "Linux (Bash)",
+      "Docker",
+      "Postman",
+      "VS Code",
+      "Vercel"
+    ],
+    "coreCS": [
+      "Data Structures & Algorithms",
+      "System Design (Basics)",
+      "OOP",
+      "DBMS",
+      "Operating Systems",
+      "Computer Networks"
+    ]
   },
   "projects": [
     {
       "title": "HyperLog — Distributed Log Aggregator",
       "description": "A high-throughput distributed log streaming engine and parser in Go with persistent disk buffering, WebSocket realtime broadcasting, and sub-millisecond query latency.",
-      "tech": ["Go", "WebSockets", "Redis", "Docker", "React"],
+      "tech": [
+        "Go",
+        "WebSockets",
+        "Redis",
+        "Docker",
+        "React"
+      ],
       "githubUrl": "https://github.com/barun20saha/hyperlog",
       "liveUrl": "https://hyperlog-demo.vercel.app",
       "image": "assets/img/projects/hyperlog.svg",
@@ -71,7 +109,13 @@
     {
       "title": "DevBoard — Collaborative Engineering Canvas",
       "description": "Full-stack real-time virtual canvas and code snippet workspace for engineering teams with CRDT-based conflict resolution, granular permission trees, and room audio chat.",
-      "tech": ["TypeScript", "Next.js", "Node.js", "Socket.io", "PostgreSQL"],
+      "tech": [
+        "TypeScript",
+        "Next.js",
+        "Node.js",
+        "Socket.io",
+        "PostgreSQL"
+      ],
       "githubUrl": "https://github.com/barun20saha/devboard",
       "liveUrl": "https://devboard-collab.vercel.app",
       "image": "assets/img/projects/devboard.svg",
@@ -80,7 +124,13 @@
     {
       "title": "CodeJudge — Microservices Sandboxed Code Runner",
       "description": "Isolated remote code execution system running user-submitted untrusted C++/Python scripts inside secure Docker containers with strict CPU/memory limits and automated test suite evaluation.",
-      "tech": ["Python", "FastAPI", "Docker", "RabbitMQ", "Redis"],
+      "tech": [
+        "Python",
+        "FastAPI",
+        "Docker",
+        "RabbitMQ",
+        "Redis"
+      ],
       "githubUrl": "https://github.com/barun20saha/codejudge",
       "liveUrl": "",
       "image": "assets/img/projects/codejudge.svg",
@@ -89,7 +139,12 @@
     {
       "title": "QueryCraft — Visual SQL Query Builder & Optimizer",
       "description": "Interactive web-based SQL generator and query visualizer that renders relational algebra trees, explains execution plans, and benchmarks query performance.",
-      "tech": ["React", "CSS3", "Node.js", "PostgreSQL"],
+      "tech": [
+        "React",
+        "CSS3",
+        "Node.js",
+        "PostgreSQL"
+      ],
       "githubUrl": "https://github.com/barun20saha/querycraft",
       "liveUrl": "https://querycraft.vercel.app",
       "image": "assets/img/projects/querycraft.svg",
@@ -160,12 +215,6 @@
       "handle": "barun20",
       "stats": "500+ Solved • Knight (Rating 1940+)",
       "url": "https://leetcode.com/barun20"
-    },
-    {
-      "platform": "Codeforces",
-      "handle": "barun20",
-      "stats": "Specialist (Peak Rating 1485)",
-      "url": "https://codeforces.com/profile/barun20"
     },
     {
       "platform": "GitHub",
