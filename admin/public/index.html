@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Content Manager | Local Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="admin-app">
+    
+    <!-- Top Header Bar -->
+    <header class="admin-header">
+      <div class="header-left">
+        <span class="header-logo-icon">&gt;_</span>
+        <div class="header-title-group">
+          <h1>Portfolio Admin</h1>
+          <span class="header-badge">Local Dev Tool</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <span id="unsaved-badge" class="unsaved-indicator" style="display: none;">● Unsaved Changes</span>
+        
+        <button id="btn-export-backup" class="btn btn-secondary btn-sm" title="Download JSON snapshot">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export
+        </button>
+
+        <label class="btn btn-secondary btn-sm btn-file-label" title="Import JSON data">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Import
+          <input type="file" id="import-json-input" accept=".json" style="display: none;">
+        </label>
+
+        <a href="/preview/index.html" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" title="Open preview of public site">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          Preview Site
+        </a>
+
+        <button id="btn-save-disk" class="btn btn-primary btn-sm" title="Save changes directly to data/portfolio.json (Ctrl+S)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          Save to Disk
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="admin-body">
+      
+      <!-- Section Navigation Sidebar -->
+      <nav class="admin-sidebar">
+        <div class="sidebar-section-title">Sections</div>
+        <ul class="tab-nav-list">
+          <li><button class="tab-btn active" data-tab="profile">👤 Profile &amp; Bio</button></li>
+          <li><button class="tab-btn" data-tab="education">🎓 Education</button></li>
+          <li><button class="tab-btn" data-tab="skills">⚡ Skills</button></li>
+          <li><button class="tab-btn" data-tab="projects">🚀 Projects</button></li>
+          <li><button class="tab-btn" data-tab="experience">💼 Experience</button></li>
+          <li><button class="tab-btn" data-tab="achievements">🏆 Achievements</button></li>
+          <li><button class="tab-btn" data-tab="certifications">📜 Certifications</button></li>
+          <li><button class="tab-btn" data-tab="codingProfiles">📊 Coding Profiles</button></li>
+          <li><button class="tab-btn" data-tab="extracurricular">🤝 Extracurricular</button></li>
+          <li><button class="tab-btn" data-tab="news">📰 News &amp; Updates</button></li>
+          <li class="sidebar-divider"></li>
+          <li><button class="tab-btn tab-raw" data-tab="rawJson">⚙️ Raw JSON Editor</button></li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <p>Local File: <code>data/portfolio.json</code></p>
+          <p class="git-note">💡 Commit manually via Git when ready to publish.</p>
+        </div>
+      </nav>
+
+      <!-- Content Editor Canvas -->
+      <main class="admin-main">
+        <div id="tab-content-container">
+          <!-- Dynamic section tabs will be injected and managed by app.js -->
+        </div>
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Generic Item Modal for Add/Edit -->
+  <div id="item-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title">Edit Entry</h3>
+        <button id="btn-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="modal-form" class="modal-body">
+        <div id="modal-form-fields"></div>
+        <div class="modal-footer">
+          <button type="button" id="btn-modal-cancel" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btn-modal-submit" class="btn btn-primary">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

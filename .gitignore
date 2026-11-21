@@ -1,7 +1,10 @@
 # Admin panel (local-only tool, never deployed to GitHub Pages)
 /admin/node_modules/
 /admin/.env
-/admin/
+
+
+
+.env
 
 # OS and Editor noise
 .DS_Store
