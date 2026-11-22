@@ -3,108 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio Content Manager | Local Admin</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <title>Portfolio Content Manager | Control Room</title>
+  
+  <link rel="preload" href="/preview/assets/fonts/bricolage-grotesque-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/preview/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('admin-theme') || localStorage.getItem('theme');
+        const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/preview/assets/css/style.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="admin-app">
     
-    <!-- Top Header Bar -->
-    <header class="admin-header">
-      <div class="header-left">
-        <span class="header-logo-icon">&gt;_</span>
-        <div class="header-title-group">
-          <h1>Portfolio Admin</h1>
-          <span class="header-badge">Local Dev Tool</span>
-        </div>
-      </div>
-
-      <div class="header-actions">
-        <span id="unsaved-badge" class="unsaved-indicator" style="display: none;">● Unsaved Changes</span>
-        
-        <button id="btn-export-backup" class="btn btn-secondary btn-sm" title="Download JSON snapshot">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Export
-        </button>
-
-        <label class="btn btn-secondary btn-sm btn-file-label" title="Import JSON data">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          Import
-          <input type="file" id="import-json-input" accept=".json" style="display: none;">
-        </label>
-
-        <a href="/preview/index.html" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" title="Open preview of public site">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-          Preview Site
+    <!-- 248px Dark Sidebar -->
+    <aside class="admin-sidebar" aria-label="Sections Sidebar">
+      <div class="sidebar-header">
+        <a href="#profile" class="sidebar-brand">
+          <span class="sidebar-brand-icon">&gt;_</span>
+          <div class="sidebar-brand-text">
+            <span class="brand-name">barun.saha</span>
+            <span class="brand-sub">control room</span>
+          </div>
         </a>
-
-        <button id="btn-save-disk" class="btn btn-primary btn-sm" title="Save changes directly to data/portfolio.json (Ctrl+S)">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-          Save to Disk
-        </button>
       </div>
-    </header>
 
-    <!-- Main Workspace Layout -->
-    <div class="admin-body">
-      
-      <!-- Section Navigation Sidebar -->
-      <nav class="admin-sidebar">
-        <div class="sidebar-section-title">Sections</div>
-        <ul class="tab-nav-list">
-          <li><button class="tab-btn active" data-tab="profile">👤 Profile &amp; Bio</button></li>
-          <li><button class="tab-btn" data-tab="education">🎓 Education</button></li>
-          <li><button class="tab-btn" data-tab="skills">⚡ Skills</button></li>
-          <li><button class="tab-btn" data-tab="projects">🚀 Projects</button></li>
-          <li><button class="tab-btn" data-tab="experience">💼 Experience</button></li>
-          <li><button class="tab-btn" data-tab="achievements">🏆 Achievements</button></li>
-          <li><button class="tab-btn" data-tab="certifications">📜 Certifications</button></li>
-          <li><button class="tab-btn" data-tab="codingProfiles">📊 Coding Profiles</button></li>
-          <li><button class="tab-btn" data-tab="extracurricular">🤝 Extracurricular</button></li>
-          <li><button class="tab-btn" data-tab="news">📰 News &amp; Updates</button></li>
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-heading">Sections</div>
+        <ul class="sidebar-menu">
+          <li>
+            <button class="nav-item active" data-tab="profile">
+              <span class="nav-item-title">Profile</span>
+              <span class="unsaved-dot" id="dot-profile" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="skills">
+              <span class="nav-item-title">Skills</span>
+              <span class="count-badge" id="count-skills">5</span>
+              <span class="unsaved-dot" id="dot-skills" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="projects">
+              <span class="nav-item-title">Projects</span>
+              <span class="count-badge" id="count-projects">1</span>
+              <span class="unsaved-dot" id="dot-projects" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="experience">
+              <span class="nav-item-title">Experience</span>
+              <span class="count-badge" id="count-experience">1</span>
+              <span class="unsaved-dot" id="dot-experience" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="education">
+              <span class="nav-item-title">Education</span>
+              <span class="count-badge" id="count-education">2</span>
+              <span class="unsaved-dot" id="dot-education" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="achievements">
+              <span class="nav-item-title">Achievements</span>
+              <span class="count-badge" id="count-achievements">3</span>
+              <span class="unsaved-dot" id="dot-achievements" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="certifications">
+              <span class="nav-item-title">Certifications</span>
+              <span class="count-badge" id="count-certifications">4</span>
+              <span class="unsaved-dot" id="dot-certifications" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="codingProfiles">
+              <span class="nav-item-title">Profiles</span>
+              <span class="count-badge" id="count-codingProfiles">3</span>
+              <span class="unsaved-dot" id="dot-codingProfiles" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="extracurricular">
+              <span class="nav-item-title">Activities</span>
+              <span class="count-badge" id="count-extracurricular">1</span>
+              <span class="unsaved-dot" id="dot-extracurricular" style="display: none;"></span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-tab="news">
+              <span class="nav-item-title">News</span>
+              <span class="count-badge" id="count-news">3</span>
+              <span class="unsaved-dot" id="dot-news" style="display: none;"></span>
+            </button>
+          </li>
           <li class="sidebar-divider"></li>
-          <li><button class="tab-btn tab-raw" data-tab="rawJson">⚙️ Raw JSON Editor</button></li>
+          <li>
+            <button class="nav-item" data-tab="rawJson">
+              <span class="nav-item-title">Raw JSON</span>
+              <span class="unsaved-dot" id="dot-rawJson" style="display: none;"></span>
+            </button>
+          </li>
         </ul>
-
-        <div class="sidebar-footer">
-          <p>Local File: <code>data/portfolio.json</code></p>
-          <p class="git-note">💡 Commit manually via Git when ready to publish.</p>
-        </div>
       </nav>
 
-      <!-- Content Editor Canvas -->
-      <main class="admin-main">
-        <div id="tab-content-container">
-          <!-- Dynamic section tabs will be injected and managed by app.js -->
-        </div>
-      </main>
+      <div class="sidebar-footer">
+        <button id="admin-theme-toggle" class="sidebar-footer-btn" aria-label="Toggle light and dark theme">
+          <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <span class="theme-label">Theme</span>
+        </button>
 
+        <a href="/preview/index.html" target="_blank" rel="noopener noreferrer" class="sidebar-footer-btn view-site-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          View site
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Editor Canvas & Sticky Bar -->
+    <div class="admin-workspace">
+      
+      <!-- Sticky Top Bar inside Editor Column -->
+      <header class="editor-topbar">
+        <div class="topbar-left">
+          <button id="mobile-sidebar-toggle" class="btn-icon mobile-menu-btn" aria-label="Toggle menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 id="section-header-title" class="editor-section-title">Profile</h2>
+          <div id="save-status-pill" class="status-pill is-saved">
+            <span class="status-pill-dot"></span>
+            <span id="save-status-text">All changes saved</span>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="btn-toggle-preview" class="btn btn-secondary btn-sm preview-toggle-btn" title="Toggle Live Preview">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <span class="preview-btn-text">Preview</span>
+          </button>
+
+          <button id="btn-export-backup" class="btn btn-secondary btn-sm" title="Download backup JSON">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export
+          </button>
+
+          <label class="btn btn-secondary btn-sm btn-file-label" title="Import JSON">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Import
+            <input type="file" id="import-json-input" accept=".json" style="display: none;">
+          </label>
+
+          <button id="btn-discard-changes" class="btn btn-secondary btn-sm" disabled title="Revert to last saved version">
+            Discard changes
+          </button>
+
+          <button id="btn-save-disk" class="btn btn-primary btn-sm" disabled title="Publish changes to disk (Ctrl+S)">
+            Save changes
+          </button>
+        </div>
+      </header>
+
+      <!-- Split Layout: Editor Canvas + Live Preview Pane -->
+      <div class="workspace-body">
+        
+        <!-- Editor Canvas Column -->
+        <main class="editor-canvas">
+          <div id="tab-content-container" class="tab-canvas-inner">
+            <!-- Dynamic section forms & list editors injected here -->
+          </div>
+        </main>
+
+        <!-- Live Preview Pane (420px, collapsible, actual public components rendered) -->
+        <aside id="live-preview-pane" class="live-preview-pane" aria-label="Live Preview">
+          <div class="preview-header">
+            <div class="preview-title-group">
+              <span class="preview-heading">Live preview</span>
+              <span class="preview-live-badge">live</span>
+            </div>
+            <div class="preview-viewport-switch">
+              <button id="btn-preview-desktop" class="viewport-btn active" title="Desktop view">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </button>
+              <button id="btn-preview-mobile" class="viewport-btn" title="Mobile view (390px)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+          <div class="preview-frame-container">
+            <div id="preview-stage" class="preview-stage">
+              <!-- Actual public site component rendered here -->
+            </div>
+          </div>
+        </aside>
+
+      </div>
     </div>
 
   </div>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container"></div>
-
-  <!-- Generic Item Modal for Add/Edit -->
-  <div id="item-modal" class="modal-backdrop" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="modal-title">Edit Entry</h3>
-        <button id="btn-modal-close" class="modal-close-btn">&times;</button>
+  <!-- Slide-Over Drawer for Adding / Editing Items -->
+  <div id="drawer-container" class="drawer-backdrop" aria-hidden="true">
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <div class="drawer-header">
+        <h3 id="drawer-title" class="drawer-title">Edit Entry</h3>
+        <button id="btn-drawer-close" class="drawer-close-btn" aria-label="Close drawer">&times;</button>
       </div>
-      <form id="modal-form" class="modal-body">
-        <div id="modal-form-fields"></div>
-        <div class="modal-footer">
-          <button type="button" id="btn-modal-cancel" class="btn btn-secondary">Cancel</button>
-          <button type="submit" id="btn-modal-submit" class="btn btn-primary">Save Entry</button>
+      <form id="drawer-form" class="drawer-body">
+        <div id="drawer-form-fields" class="drawer-fields"></div>
+        <div class="drawer-footer">
+          <button type="button" id="btn-drawer-cancel" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btn-drawer-submit" class="btn btn-primary">Done</button>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="delete-modal-title">Confirm Deletion</h3>
+        <button id="btn-delete-modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="delete-modal-text">Are you sure you want to delete this item? This removes it from your site.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-delete-cancel" class="btn btn-secondary">Cancel</button>
+        <button type="button" id="btn-delete-confirm" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>
