@@ -39,6 +39,7 @@ async function initPortfolio() {
     renderFooter(data.profile);
 
     // Setup interactive events
+    initThemeToggle();
     setupNavScrollSpy();
     setupMobileNav();
 
@@ -540,10 +541,38 @@ function renderFooter(profile) {
 }
 
 /**
+ * Theme Toggle Handler
+ */
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (!toggleBtn) return;
+
+  const getTheme = () => document.documentElement.getAttribute('data-theme') || 'light';
+
+  const setTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('theme', theme);
+    } catch (e) {}
+
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'dark' ? '#0F1218' : '#FFFAE7');
+    }
+  };
+
+  toggleBtn.addEventListener('click', () => {
+    const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+  });
+}
+
+/**
  * Navigation Scroll Spy & Smooth Link Handling
+ * Ensures no nav item is active while at the top (hero)
  */
 function setupNavScrollSpy() {
-  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  const navLinks = document.querySelectorAll('.desktop-nav .nav-link[href^="#"]');
   const sections = [];
 
   navLinks.forEach(link => {
@@ -553,7 +582,14 @@ function setupNavScrollSpy() {
   });
 
   const onScroll = () => {
-    const scrollPos = window.scrollY + 120;
+    // If we are above the first real section (in Hero), clear active state
+    const firstSectionTop = sections.length > 0 ? sections[0].element.offsetTop : 300;
+    if (window.scrollY < firstSectionTop - 150) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      return;
+    }
+
+    const scrollPos = window.scrollY + 140;
     for (let i = sections.length - 1; i >= 0; i--) {
       const { element, link } = sections[i];
       if (element.offsetTop <= scrollPos) {
@@ -565,29 +601,71 @@ function setupNavScrollSpy() {
   };
 
   window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 /**
- * Mobile Navigation Toggle
+ * Mobile Navigation Drawer Toggle & Focus Trap
  */
 function setupMobileNav() {
   const toggleBtn = document.querySelector('.nav-toggle');
-  const navLinks = document.querySelector('.nav-links');
+  const navDrawer = document.getElementById('mobile-nav-drawer');
+  const closeBtn = document.getElementById('mobile-nav-close');
+  const backdrop = navDrawer ? navDrawer.querySelector('.mobile-nav-backdrop') : null;
 
-  if (!toggleBtn || !navLinks) return;
+  if (!toggleBtn || !navDrawer) return;
+
+  function openMenu() {
+    navDrawer.classList.add('is-open');
+    navDrawer.setAttribute('aria-hidden', 'false');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    const firstFocusable = navDrawer.querySelector('button, a');
+    if (firstFocusable) firstFocusable.focus();
+  }
+
+  function closeMenu() {
+    navDrawer.classList.remove('is-open');
+    navDrawer.setAttribute('aria-hidden', 'true');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    toggleBtn.focus();
+  }
 
   toggleBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('is-open');
-    const isOpen = navLinks.classList.contains('is-open');
-    toggleBtn.setAttribute('aria-expanded', isOpen);
+    if (navDrawer.classList.contains('is-open')) closeMenu();
+    else openMenu();
   });
 
-  // Close nav on link click
-  navLinks.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('is-open');
-      toggleBtn.setAttribute('aria-expanded', 'false');
-    });
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+
+  navDrawer.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (!navDrawer.classList.contains('is-open')) return;
+
+    if (e.key === 'Escape') {
+      closeMenu();
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      const focusables = navDrawer.querySelectorAll('button, a[href]');
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 }
 

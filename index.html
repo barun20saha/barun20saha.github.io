@@ -36,25 +36,17 @@
 </head>
 <body>
   <!-- Accessibility Skip Link -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <!-- Sticky Top Navigation -->
-  <header class="site-nav">
-    <div class="container nav-container">
-      <a href="#hero" class="brand-link" aria-label="Home">
+  <!-- Floating Sticky Pill Navigation -->
+  <div class="nav-wrapper">
+    <header class="site-nav">
+      <a href="#hero" class="brand-link" aria-label="Barun Saha - Home">
         <span class="brand-prompt">&gt;_</span>
         <span>barun.saha</span>
       </a>
 
-      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
-
-      <nav>
+      <nav class="desktop-nav" aria-label="Main Navigation">
         <ul class="nav-links">
           <li><a href="#about" class="nav-link">About</a></li>
           <li><a href="#skills" class="nav-link">Skills</a></li>
@@ -66,8 +58,49 @@
           <li><a href="#news" class="nav-link">News</a></li>
         </ul>
       </nav>
+
+      <div class="nav-actions">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle color theme" title="Toggle theme">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+
+        <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Mobile Drawer Navigation -->
+  <div id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+    <div class="mobile-nav-backdrop"></div>
+    <div class="mobile-nav-content">
+      <div class="mobile-nav-header">
+        <a href="#hero" class="brand-link" aria-label="Barun Saha - Home">
+          <span class="brand-prompt">&gt;_</span>
+          <span>barun.saha</span>
+        </a>
+        <button id="mobile-nav-close" class="mobile-nav-close-btn" aria-label="Close navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="#about" class="mobile-nav-link">About</a></li>
+        <li><a href="#skills" class="mobile-nav-link">Skills</a></li>
+        <li><a href="#projects" class="mobile-nav-link">Projects</a></li>
+        <li><a href="#experience" class="mobile-nav-link">Experience</a></li>
+        <li><a href="#education" class="mobile-nav-link">Education</a></li>
+        <li><a href="#achievements" class="mobile-nav-link">Achievements</a></li>
+        <li><a href="#profiles" class="mobile-nav-link">Profiles</a></li>
+        <li><a href="#news" class="mobile-nav-link">News</a></li>
+      </ul>
     </div>
-  </header>
+  </div>
 
   <!-- Loading & Error Fallbacks -->
   <div class="container">
@@ -133,12 +166,12 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="section">
+    <section id="about" class="section" aria-labelledby="about-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 01. Overview</span>
-          <h2>About Me</h2>
-        </div>
+        <header class="section-head">
+          <h2 id="about-heading">About</h2>
+          <p class="section-desc">Background, current studies and software focus.</p>
+        </header>
         <div class="about-grid">
           <div class="about-card">
             <p id="about-bio-text" class="about-bio"></p>
@@ -153,13 +186,12 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="section">
+    <section id="skills" class="section" aria-labelledby="skills-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 02. Technical Arsenal</span>
-          <h2>Skills &amp; Technologies</h2>
-          <p>Grouped domains of expertise and core computer science competencies.</p>
-        </div>
+        <header class="section-head">
+          <h2 id="skills-heading">Skills</h2>
+          <p class="section-desc">The languages, tools and fundamentals I work with.</p>
+        </header>
         <div id="skills-grid" class="skills-grid">
           <!-- Clustered tags injected via JS -->
         </div>
@@ -167,13 +199,12 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="section">
+    <section id="projects" class="section" aria-labelledby="projects-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 03. Engineering Portfolio</span>
-          <h2>Featured Projects</h2>
-          <p>Selected systems, full-stack applications, and developer tools built from scratch.</p>
-        </div>
+        <header class="section-head">
+          <h2 id="projects-heading">Projects</h2>
+          <p class="section-desc">Systems and applications I have built.</p>
+        </header>
         <div id="projects-grid" class="projects-grid">
           <!-- Project cards injected via JS -->
         </div>
@@ -181,12 +212,12 @@
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="section">
+    <section id="experience" class="section" aria-labelledby="experience-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 04. Career</span>
-          <h2>Experience &amp; Leadership</h2>
-        </div>
+        <header class="section-head">
+          <h2 id="experience-heading">Experience</h2>
+          <p class="section-desc">Internships, industry roles and research work.</p>
+        </header>
         <div id="experience-timeline" class="timeline">
           <!-- Experience timeline injected via JS -->
         </div>
@@ -194,12 +225,12 @@
     </section>
 
     <!-- Education Section -->
-    <section id="education" class="section">
+    <section id="education" class="section" aria-labelledby="education-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 05. Academics</span>
-          <h2>Education</h2>
-        </div>
+        <header class="section-head">
+          <h2 id="education-heading">Education</h2>
+          <p class="section-desc">Academic qualifications and coursework.</p>
+        </header>
         <div id="education-timeline" class="timeline">
           <!-- Education items injected via JS -->
         </div>
@@ -207,12 +238,12 @@
     </section>
 
     <!-- Achievements & Certifications Section -->
-    <section id="achievements" class="section">
+    <section id="achievements" class="section" aria-labelledby="achievements-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 06. Recognition</span>
-          <h2>Achievements &amp; Certifications</h2>
-        </div>
+        <header class="section-head">
+          <h2 id="achievements-heading">Achievements</h2>
+          <p class="section-desc">Milestones, hackathons and certifications.</p>
+        </header>
         <div class="creds-grid">
           <div class="creds-column">
             <h3 class="creds-column-title">
@@ -238,13 +269,12 @@
     </section>
 
     <!-- Coding Profiles Section -->
-    <section id="profiles" class="section">
+    <section id="profiles" class="section" aria-labelledby="profiles-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 07. Online Handles</span>
-          <h2>Coding &amp; Developer Profiles</h2>
-          <p>Live problem-solving track records and open source repository activity.</p>
-        </div>
+        <header class="section-head">
+          <h2 id="profiles-heading">Profiles</h2>
+          <p class="section-desc">Problem solving and open-source handles.</p>
+        </header>
         <div id="coding-profiles-grid" class="coding-profiles-grid">
           <!-- Coding profile stat cards injected via JS -->
         </div>
@@ -252,12 +282,12 @@
     </section>
 
     <!-- Extracurricular Section -->
-    <section id="extracurricular-section" class="section">
+    <section id="extracurricular-section" class="section" aria-labelledby="activities-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 08. Community</span>
-          <h2>Extracurricular Activities</h2>
-        </div>
+        <header class="section-head">
+          <h2 id="activities-heading">Activities</h2>
+          <p class="section-desc">Leadership and community involvement.</p>
+        </header>
         <div id="extracurricular-list">
           <!-- Extracurricular items injected via JS -->
         </div>
@@ -265,12 +295,12 @@
     </section>
 
     <!-- News / Timeline Section -->
-    <section id="news" class="section">
+    <section id="news" class="section" aria-labelledby="news-heading">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">// 09. Chronological Log</span>
-          <h2>News &amp; Updates</h2>
-        </div>
+        <header class="section-head">
+          <h2 id="news-heading">News</h2>
+          <p class="section-desc">Recent milestones and project changelog.</p>
+        </header>
         <div class="about-card">
           <div id="news-list">
             <!-- News items injected via JS -->
