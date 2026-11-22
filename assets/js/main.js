@@ -86,6 +86,9 @@ function updateMetadata(profile) {
 
 /**
  * Simulates an engineer's terminal typing session in the Hero
+ * Orchestrated load sequence (approx 2.6s total):
+ * Commands type character by character (14ms per char, 250ms pause)
+ * Prints [ONLINE] -> draws dashed connector, raises portrait, scales sun circle
  */
 function initTerminalTyper(data) {
   const terminalEl = document.getElementById('terminal-content');
@@ -93,123 +96,186 @@ function initTerminalTyper(data) {
 
   const profile = data.profile || {};
   const skills = data.skills || {};
-  const langStr = Array.isArray(skills.languages) ? skills.languages.join(', ') : 'C++, Python, Go, TypeScript';
-  const interests = 'Distributed Systems, High-Performance Web, Compilers & DSA';
+  const langStr = Array.isArray(skills.languages) ? skills.languages.slice(0, 6).join(', ') : 'C, C++, Python, Java, SQL, MongoDB';
+  const interests = 'Distributed Systems, High-Performance Web & Multimodal AI';
+  const statusStr = profile.status || 'Open to Software Engineering Internships';
 
   const terminalLines = [
     { type: 'cmd', text: 'whoami' },
-    { type: 'output', text: `${profile.name || 'Barun Saha'} — ${profile.tagline || 'B.Tech CSE Student'}` },
+    { type: 'output', text: `${profile.name || 'Barun Saha'}: B.Tech CSE Student | Building scalable systems` },
     { type: 'cmd', text: 'cat core_stack.txt' },
     { type: 'output', text: `Languages: ${langStr}` },
     { type: 'cmd', text: 'cat interests.txt' },
     { type: 'output', text: interests },
     { type: 'cmd', text: 'curl -s https://status.local' },
-    { type: 'output', text: `[ONLINE] ${profile.status || 'Ready for impact'}` }
+    { type: 'output', text: `[ONLINE] ${statusStr}`, isOnline: true }
   ];
 
-  // Check if reduced motion is preferred
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (prefersReducedMotion) {
-    // Render static output immediately
+  function renderFinal() {
     terminalEl.innerHTML = terminalLines.map(line => {
       if (line.type === 'cmd') {
-        return `<div class="cmd-line"><span class="cmd-prompt">$</span>${escapeHTML(line.text)}</div>`;
+        return `<div class="cmd-line"><span class="cmd-prompt">$</span> <span class="cmd-text">${escapeHTML(line.text)}</span></div>`;
       } else {
-        return `<div class="cmd-output">> ${escapeHTML(line.text)}</div>`;
+        const onlineClass = line.isOnline ? ' cmd-online' : '';
+        return `<div class="cmd-output${onlineClass}">&gt; ${escapeHTML(line.text)}</div>`;
       }
-    }).join('') + '<div class="cmd-line"><span class="cmd-prompt">$</span><span class="cursor-blink"></span></div>';
+    }).join('') + '<div class="cmd-line"><span class="cmd-prompt">$</span> <span class="cursor-blink">▌</span></div>';
+
+    document.documentElement.classList.add('hero-online');
+    setTimeout(() => {
+      const cursor = terminalEl.querySelector('.cursor-blink');
+      if (cursor) cursor.classList.add('cursor-stopped');
+    }, 8000);
+  }
+
+  if (prefersReduced) {
+    renderFinal();
     return;
   }
 
-  // Interactive typing animation sequence
-  terminalEl.innerHTML = '';
-  let lineIdx = 0;
-  let charIdx = 0;
-  let currentCmdContainer = null;
+  let isSkipped = false;
+  const skipSequence = () => {
+    if (isSkipped) return;
+    isSkipped = true;
+    renderFinal();
+  };
 
-  function typeNext() {
-    if (lineIdx >= terminalLines.length) {
-      // Finished all lines, append final static prompt
-      const finalPrompt = document.createElement('div');
-      finalPrompt.className = 'cmd-line';
-      finalPrompt.innerHTML = `<span class="cmd-prompt">$</span><span class="cursor-blink"></span>`;
-      terminalEl.appendChild(finalPrompt);
-      return;
-    }
-
-    const item = terminalLines[lineIdx];
-
-    if (item.type === 'cmd') {
-      if (charIdx === 0) {
-        currentCmdContainer = document.createElement('div');
-        currentCmdContainer.className = 'cmd-line';
-        currentCmdContainer.innerHTML = `<span class="cmd-prompt">$</span><span class="cmd-text"></span><span class="cursor-blink"></span>`;
-        terminalEl.appendChild(currentCmdContainer);
-      }
-
-      const textEl = currentCmdContainer.querySelector('.cmd-text');
-      if (charIdx < item.text.length) {
-        textEl.textContent += item.text.charAt(charIdx);
-        charIdx++;
-        setTimeout(typeNext, 28 + Math.random() * 25);
-      } else {
-        // Command finished typing, remove cursor from this line
-        const cursor = currentCmdContainer.querySelector('.cursor-blink');
-        if (cursor) cursor.remove();
-        charIdx = 0;
-        lineIdx++;
-        setTimeout(typeNext, 180);
-      }
-    } else if (item.type === 'output') {
-      const outputDiv = document.createElement('div');
-      outputDiv.className = 'cmd-output';
-      outputDiv.textContent = `> ${item.text}`;
-      terminalEl.appendChild(outputDiv);
-      lineIdx++;
-      setTimeout(typeNext, 120);
-    }
+  const heroSection = document.getElementById('hero');
+  if (heroSection) {
+    heroSection.addEventListener('click', skipSequence, { once: true });
+    heroSection.addEventListener('keydown', skipSequence, { once: true });
   }
 
-  // Start typing shortly after page load
-  setTimeout(typeNext, 250);
+  terminalEl.innerHTML = '';
+
+  async function runSequence() {
+    for (const item of terminalLines) {
+      if (isSkipped) return;
+
+      if (item.type === 'cmd') {
+        const lineEl = document.createElement('div');
+        lineEl.className = 'cmd-line';
+        lineEl.innerHTML = `<span class="cmd-prompt">$</span> <span class="cmd-text"></span><span class="cursor-blink">▌</span>`;
+        terminalEl.appendChild(lineEl);
+        const textSpan = lineEl.querySelector('.cmd-text');
+
+        for (let i = 0; i < item.text.length; i++) {
+          if (isSkipped) return;
+          textSpan.textContent += item.text[i];
+          await new Promise(r => setTimeout(r, 14));
+        }
+
+        const cursor = lineEl.querySelector('.cursor-blink');
+        if (cursor) cursor.remove();
+        await new Promise(r => setTimeout(r, 220));
+
+      } else {
+        const outEl = document.createElement('div');
+        outEl.className = 'cmd-output' + (item.isOnline ? ' cmd-online' : '');
+        outEl.textContent = `> ${item.text}`;
+        terminalEl.appendChild(outEl);
+
+        if (item.isOnline) {
+          document.documentElement.classList.add('hero-online');
+        }
+        await new Promise(r => setTimeout(r, 160));
+      }
+    }
+
+    if (isSkipped) return;
+    const finalPrompt = document.createElement('div');
+    finalPrompt.className = 'cmd-line';
+    finalPrompt.innerHTML = `<span class="cmd-prompt">$</span> <span class="cursor-blink">▌</span>`;
+    terminalEl.appendChild(finalPrompt);
+
+    setTimeout(() => {
+      const cursor = finalPrompt.querySelector('.cursor-blink');
+      if (cursor) cursor.classList.add('cursor-stopped');
+    }, 8000);
+  }
+
+  setTimeout(runSequence, 200);
 }
 
 /**
- * Render Hero Profile Action Card
+ * Render Hero Profile Action Card & Cutout Fallback
  */
 function renderHeroProfile(profile) {
   if (!profile) return;
-
-  const avatar = document.getElementById('hero-avatar');
-  if (avatar && profile.photo) {
-    avatar.src = profile.photo;
-    avatar.alt = profile.name || 'Barun Saha';
-  }
 
   const nameEl = document.getElementById('hero-name');
   if (nameEl && profile.name) {
     nameEl.textContent = profile.name;
   }
 
-  const statusEl = document.getElementById('hero-status');
+  const taglineEl = document.getElementById('hero-tagline');
+  if (taglineEl) {
+    const rawTagline = profile.tagline || 'Building practical | scalable software solutions.';
+    let lightPart = '';
+    let boldPart = '';
+    if (rawTagline.includes('|')) {
+      const parts = rawTagline.split('|').map(p => p.trim());
+      lightPart = parts[0] || '';
+      boldPart = parts.slice(1).join(' ') || '';
+    } else {
+      const words = rawTagline.split(' ');
+      if (words.length > 3) {
+        lightPart = words.slice(0, 2).join(' ');
+        boldPart = words.slice(2).join(' ');
+      } else {
+        boldPart = rawTagline;
+      }
+    }
+    taglineEl.innerHTML = `
+      ${lightPart ? `<span class="phrase-light">${escapeHTML(lightPart)}</span>` : ''}
+      <span class="phrase-bold">${escapeHTML(boldPart)}</span>
+    `;
+  }
+
+  // Portrait cutout with fallback check
+  const portraitImg = document.getElementById('hero-portrait-img');
+  const portraitStage = document.querySelector('.hero-portrait-stage');
+  if (portraitImg) {
+    portraitImg.alt = profile.name || 'Barun Saha';
+    const cutoutImg = new Image();
+    cutoutImg.onload = () => {
+      portraitImg.src = 'assets/portrait-cutout.webp';
+      if (portraitStage) portraitStage.classList.remove('is-fallback');
+    };
+    cutoutImg.onerror = () => {
+      portraitImg.src = profile.photo || 'assets/img/B_sphoto-1789478569220-5939.jpg';
+      if (portraitStage) portraitStage.classList.add('is-fallback');
+    };
+    cutoutImg.src = 'assets/portrait-cutout.webp';
+  }
+
+  const statusEl = document.getElementById('hero-status-text');
   if (statusEl && profile.status) {
     statusEl.textContent = profile.status;
   }
 
   const resumeBtn = document.getElementById('hero-resume-btn');
-  if (resumeBtn && profile.resumeUrl) {
-    resumeBtn.href = profile.resumeUrl;
-  } else if (resumeBtn) {
-    resumeBtn.style.display = 'none';
+  if (resumeBtn) {
+    if (profile.resumeUrl) {
+      resumeBtn.href = profile.resumeUrl;
+      resumeBtn.style.display = 'inline-flex';
+    } else {
+      resumeBtn.style.display = 'none';
+    }
   }
 
   const socialsContainer = document.getElementById('hero-socials');
   if (socialsContainer && Array.isArray(profile.socials)) {
     socialsContainer.innerHTML = profile.socials.map(s => {
       const iconSvg = getSocialIconSvg(s.platform);
+      let href = s.url || '';
+      if (s.platform.toLowerCase().includes('mail') && !href.startsWith('mailto:')) {
+        href = 'mailto:' + href;
+      }
       return `
-        <a href="${escapeHTML(s.url)}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="${escapeHTML(s.platform)}" aria-label="${escapeHTML(s.platform)}">
+        <a href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="${escapeHTML(s.platform)}" aria-label="${escapeHTML(s.platform)} (opens in a new tab)">
           ${iconSvg}
         </a>
       `;
