@@ -59,25 +59,60 @@ Content is stored on disk at `data/portfolio.json` and served/updated through Ex
   - When user clicks "Save changes" (or presses `Ctrl+S`), `POST /api/portfolio` writes the formatted JSON back to `data/portfolio.json`.
   - Image uploads POST to `/api/upload` (via `multer`) and save to `assets/img/` or `assets/img/projects/`.
 
-## 4. Local Execution & Baseline Screenshots
+## 4. Local Execution & Screenshots
 - **How to run**:
   - Admin & preview: `node admin/server.js` (listening on `http://127.0.0.1:3000`).
   - Admin URL: `http://127.0.0.1:3000/admin`
-  - Public site preview: `http://127.0.0.1:3000/preview/index.html` (or via static file server).
-- **Baseline screenshots captured**:
+  - Public site preview: `http://127.0.0.1:3000/preview/index.html`.
+- **Baseline screenshots (`docs/before/`)**:
   - `docs/before/site-1440.png`: Public site at desktop resolution (1440x900)
   - `docs/before/site-390.png`: Public site at mobile resolution (390x844)
   - `docs/before/admin-1440.png`: Admin panel at desktop resolution (1440x900)
   - `docs/before/admin-390.png`: Admin panel at mobile resolution (390x844)
+- **Redesign screenshots (`docs/after/`)**:
+  - `docs/after/site-1440.png`: Redesigned public site (desktop 1440x900, light mode)
+  - `docs/after/site-390.png`: Redesigned public site (mobile 390x844, light mode)
+  - `docs/after/site-dark-1440.png`: Redesigned public site (desktop 1440x900, dark mode)
+  - `docs/after/admin-1440.png`: Upgraded Admin Control Room (desktop 1440x900, light mode)
+  - `docs/after/admin-390.png`: Upgraded Admin Control Room (mobile 390x844, light mode)
+  - `docs/after/admin-dark-1440.png`: Upgraded Admin Control Room (desktop 1440x900, dark mode)
 
-## 5. Ten-Line Execution Plan
-1. Commit Step 0 reconnaissance notes and baseline screenshots to `feat/portfolio-redesign-v2`.
-2. Configure design tokens, CSS variables, dark theme tokens, and self-hosted `@font-face` definitions in `assets/css/style.css`.
-3. Re-architect global layout, container widths, responsive grid, floating sticky header nav, and section header pattern in `index.html` and `assets/css/style.css`.
-4. Build the terminal hero, portrait sun-circle with cutout fallback, dashed connector SVG, status chip, action buttons, and load sequence in `index.html`, `assets/css/style.css`, and `assets/js/main.js`.
-5. Redesign About (large statement + facts code block), Skills (definition rows with tag pills), and Projects (featured full-width slab + 2-col card grid with per-project terminal covers) in `index.html`, `assets/css/style.css`, and `assets/js/main.js`.
-6. Implement Experience & Education dashed timelines, Achievements & Certifications ledger tables, Coding Profiles tiles, Extracurricular entry, and News changelog ledger with expander in `index.html`, `assets/css/style.css`, and `assets/js/main.js`.
-7. Build the terminal bookend footer, theme toggle (system/light/dark with localStorage persistence & no-flash script), and skip-to-content accessibility link.
-8. Redesign Admin panel layout with 248px dark sidebar, brand header, unsaved changes status, keyboard shortcuts, and cohesive design tokens in `admin/public/index.html` and `admin/public/style.css`.
-9. Upgrade Admin editing UX: list rows with drag/move reordering, slide-over drawer forms, image uploads with preview, multi-line bullet field, tags input, live preview pane with desktop/mobile switch, and delete modal with 8s undo toast in `admin/public/app.js`.
-10. Apply content typo fixes in `data/portfolio.json`, run WCAG AA and responsive audits, capture `docs/after/` screenshots, update `README.md`, and prepare the PR.
+## 5. Design Decisions & Rationale
+- **Butter `#FFFAE7` Canvas**: Sampled from Barun Saha's personal banner, creating cohesive harmony between public presence and developer branding.
+- **Variable Bricolage Grotesque**: Range 300 to 800 gives high-impact weight contrast (`phrase-light` + `phrase-bold`) without needing a separate display font.
+- **Terminal Bookends**: Hero and footer serve as dark surfaces framing the warm page, anchoring Barun's developer identity.
+- **Section Structural Diversity**: Replaced uniform cards with purposeful structures tailored to the data:
+  - Definition rows for skills.
+  - Full-width hero slab + 2-col card grid for projects.
+  - Dashed vertical lines for experience & education timelines.
+  - Clean white ledgers for achievements, certifications, and news changelog.
+  - Interactive clickable tiles for coding profiles.
+- **Dashed Connector**: Matches the hand-drawn connection aesthetic in the banner, tying the hero terminal sequence to the online status pill.
+- **Portrait Cutout Fallback**: Since `assets/portrait-cutout.webp` is not yet available, image load detection falls back to a 240px circular crop of `B_sphoto-1789478569220-5939.jpg` with a 4px white ring over the sun circle.
+
+## 6. Verification Checklist Results
+
+### Visual
+- [x] **Hero matches section 7.1**: Terminal, cutout portrait (with graceful fallback), sun circle, dashed connector SVG, status chip, action buttons.
+- [x] **Banner link**: Page background is exactly `#FFFAE7` in light mode (`#171811` in dark mode).
+- [x] **No ALL-CAPS labels, no `// 01.` eyebrows**: All eyebrows removed; clean semantic `<h2>` headers with one-line descriptions.
+- [x] **Distinct section structures**: Definition rows, slab, ledger, timeline, tiles; no repeated monotonous cards.
+- [x] **No horizontal scroll**: Verified at 360, 390, 768, 1024, 1280, 1440, and 1920px.
+
+### Behaviour
+- [x] **Hero typing sequence**: Plays once in 2.6s; instant skip on click/keypress; instant render when `prefers-reduced-motion` is enabled or JS disabled; stops cursor blinking after 8s.
+- [x] **Nav scroll-spy**: Accurate active states; nothing highlighted in hero; mobile drawer traps focus and closes with Esc.
+- [x] **Theme toggle**: Light/Dark toggle persists in `localStorage` with no-flash inline script.
+- [x] **Empty optional fields**: No broken images or blank buttons when fields are missing or empty.
+
+### Admin Round Trip
+- [x] **Profile editing**: Name and tagline edits update the site and terminal typer.
+- [x] **Projects CRUD**: Add, edit in right drawer, featured switch, reordering (keyboard + drag), delete confirmation, and 8-second Undo toast.
+- [x] **Existing data compatibility**: Existing `data/portfolio.json` loaded cleanly without migration.
+- [x] **Live preview**: 420px preview column reuses identical site rendering functions and updates debounced (150ms).
+- [x] **Keyboard & safety**: `Ctrl/Cmd + S` saves, inline validation, `beforeunload` warning when dirty, Discard changes reverts to server copy.
+
+### Quality
+- [x] **Accessibility**: Semantic HTML5 landmarks, WCAG AA contrast, skip link, visible focus rings, ARIA labels.
+- [x] **Performance**: Preloaded self-hosted variable WOFF2 fonts, zero external runtime frameworks, native lazy loading on images, high-priority eager load on portrait.
+- [x] **Clean git history**: All work committed to `feat/portfolio-redesign-v2` across structured Conventional Commits. No secrets committed.
