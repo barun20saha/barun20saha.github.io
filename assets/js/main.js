@@ -475,19 +475,28 @@ function renderExperience(experienceList) {
   const container = document.getElementById('experience-timeline');
   if (!container || !experienceList || experienceList.length === 0) return;
 
-  container.innerHTML = experienceList.map(item => `
-    <div class="timeline-item">
-      <div class="timeline-marker" aria-hidden="true"></div>
-      <div class="timeline-card">
-        <div class="timeline-header-row">
-          <h3 class="timeline-title">${escapeHTML(item.role)}</h3>
-          <span class="timeline-badge">${escapeHTML(item.duration)}</span>
-        </div>
-        <div class="timeline-subtitle">${escapeHTML(item.org)}${item.location ? ` • ${escapeHTML(item.location)}` : ''}</div>
-        <p class="timeline-desc">${escapeHTML(item.description)}</p>
+  container.innerHTML = experienceList.map(item => {
+    const bullets = (item.description || '').split('\n').map(l => l.trim()).filter(Boolean);
+    const bulletsHtml = bullets.length > 0 ? `
+      <ul class="exp-bullets">
+        ${bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}
+      </ul>
+    ` : '';
+
+    return `
+      <div class="timeline-entry">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <article class="timeline-card">
+          <div class="timeline-top-row">
+            <h3 class="timeline-title">${escapeHTML(item.role)}</h3>
+            <span class="timeline-date-chip">${escapeHTML(item.duration)}</span>
+          </div>
+          <div class="timeline-org">${escapeHTML(item.org)}${item.location ? ` — ${escapeHTML(item.location)}` : ''}</div>
+          ${bulletsHtml}
+        </article>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 /**
@@ -498,63 +507,60 @@ function renderEducation(educationList) {
   if (!container || !educationList || educationList.length === 0) return;
 
   container.innerHTML = educationList.map(item => `
-    <div class="timeline-item">
-      <div class="timeline-marker" aria-hidden="true"></div>
-      <div class="timeline-card">
-        <div class="timeline-header-row">
+    <div class="timeline-entry">
+      <div class="timeline-node" aria-hidden="true"></div>
+      <article class="timeline-card">
+        <div class="timeline-top-row">
           <h3 class="timeline-title">${escapeHTML(item.degree)}</h3>
-          <span class="timeline-badge">${escapeHTML(item.years)}</span>
+          <span class="timeline-date-chip">${escapeHTML(item.years)}</span>
         </div>
-        <div class="timeline-subtitle">${escapeHTML(item.institute)}</div>
-        ${item.score ? `<div class="timeline-score">${escapeHTML(item.score)}</div>` : ''}
-        ${item.details ? `<p class="timeline-desc">${escapeHTML(item.details)}</p>` : ''}
-      </div>
+        <div class="timeline-org">${escapeHTML(item.institute)}</div>
+        ${item.score ? `<div class="timeline-score-chip">${escapeHTML(item.score)}</div>` : ''}
+        ${item.details ? `<p class="timeline-details">${escapeHTML(item.details)}</p>` : ''}
+      </article>
     </div>
   `).join('');
 }
 
 /**
- * Render Combined Achievements & Certifications
+ * Render Combined Achievements & Certifications (white ledgers)
  */
 function renderAchievementsAndCerts(achievements, certifications) {
-  const section = document.getElementById('achievements-section');
-  const achContainer = document.getElementById('achievements-list');
-  const certContainer = document.getElementById('certifications-list');
+  const achContainer = document.getElementById('achievements-ledger');
+  const certContainer = document.getElementById('certifications-ledger');
 
-  const hasAch = Array.isArray(achievements) && achievements.length > 0;
-  const hasCert = Array.isArray(certifications) && certifications.length > 0;
-
-  if (!hasAch && !hasCert) {
-    if (section) section.style.display = 'none';
-    return;
-  }
-
-  if (hasAch && achContainer) {
+  if (achContainer && Array.isArray(achievements)) {
     achContainer.innerHTML = achievements.map(a => `
-      <div class="cred-card">
-        <div>
-          <h4 class="cred-title">${escapeHTML(a.title)}</h4>
-          ${a.date ? `<div class="cred-meta">${escapeHTML(a.date)}</div>` : ''}
+      <div class="ledger-row">
+        <div class="ledger-info">
+          <div class="ledger-title">${escapeHTML(a.title)}</div>
+          ${a.date ? `<div class="ledger-meta">${escapeHTML(a.date)}</div>` : ''}
         </div>
-        ${a.link ? `<a href="${escapeHTML(a.link)}" target="_blank" rel="noopener noreferrer" class="cred-link">Verify ↗</a>` : ''}
+        ${a.link ? `
+          <a href="${escapeHTML(a.link)}" target="_blank" rel="noopener noreferrer" class="btn-verify" aria-label="Verify ${escapeHTML(a.title)} (opens in a new tab)">
+            Verify
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        ` : ''}
       </div>
     `).join('');
-  } else if (achContainer) {
-    achContainer.parentElement.style.display = 'none';
   }
 
-  if (hasCert && certContainer) {
+  if (certContainer && Array.isArray(certifications)) {
     certContainer.innerHTML = certifications.map(c => `
-      <div class="cred-card">
-        <div>
-          <h4 class="cred-title">${escapeHTML(c.title)}</h4>
-          <div class="cred-meta">${escapeHTML(c.issuer || '')}${c.date ? ` • ${escapeHTML(c.date)}` : ''}</div>
+      <div class="ledger-row">
+        <div class="ledger-info">
+          <div class="ledger-title">${escapeHTML(c.title)}</div>
+          <div class="ledger-meta">${escapeHTML(c.issuer || '')}${c.date ? ` • ${escapeHTML(c.date)}` : ''}</div>
         </div>
-        ${c.link ? `<a href="${escapeHTML(c.link)}" target="_blank" rel="noopener noreferrer" class="cred-link">Verify ↗</a>` : ''}
+        ${c.link ? `
+          <a href="${escapeHTML(c.link)}" target="_blank" rel="noopener noreferrer" class="btn-verify" aria-label="Verify certification for ${escapeHTML(c.title)} (opens in a new tab)">
+            Verify
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        ` : ''}
       </div>
     `).join('');
-  } else if (certContainer) {
-    certContainer.parentElement.style.display = 'none';
   }
 }
 
@@ -562,67 +568,91 @@ function renderAchievementsAndCerts(achievements, certifications) {
  * Render Coding Profiles Stats Cards
  */
 function renderCodingProfiles(profiles) {
-  const section = document.getElementById('coding-profiles-section');
   const container = document.getElementById('coding-profiles-grid');
+  if (!container || !profiles || profiles.length === 0) return;
 
-  if (!profiles || profiles.length === 0) {
-    if (section) section.style.display = 'none';
-    return;
-  }
+  container.innerHTML = profiles.map(p => {
+    let cleanStats = (p.stats || '').replace(/\.$/, '');
+    if (cleanStats.toLowerCase().includes('institute rank')) {
+      cleanStats = cleanStats.replace('•', ',').toLowerCase();
+    }
 
-  container.innerHTML = profiles.map(p => `
-    <a href="${escapeHTML(p.url)}" target="_blank" rel="noopener noreferrer" class="profile-stat-card">
-      <div class="profile-card-top">
-        <span class="profile-platform-name">${escapeHTML(p.platform)}</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-      </div>
-      <div class="profile-handle">@${escapeHTML(p.handle)}</div>
-      <div class="profile-stat-highlight">${escapeHTML(p.stats)}</div>
-    </a>
-  `).join('');
+    return `
+      <a href="${escapeHTML(p.url)}" target="_blank" rel="noopener noreferrer" class="profile-tile" aria-label="${escapeHTML(p.platform)} profile (opens in a new tab)">
+        <div class="profile-tile-header">
+          <h3 class="profile-tile-platform">${escapeHTML(p.platform)}</h3>
+          <svg class="external-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </div>
+        <div class="profile-tile-handle">@${escapeHTML(p.handle)}</div>
+        <div class="profile-tile-stat">${escapeHTML(cleanStats)}</div>
+      </a>
+    `;
+  }).join('');
 }
 
 /**
  * Render Extracurricular & Leadership
  */
 function renderExtracurricular(list) {
-  const section = document.getElementById('extracurricular-section');
   const container = document.getElementById('extracurricular-list');
+  if (!container || !list || list.length === 0) return;
 
-  if (!list || list.length === 0) {
-    if (section) section.style.display = 'none';
-    return;
-  }
+  container.innerHTML = list.map(item => {
+    const lines = (item.description || '').split('\n').map(l => l.trim()).filter(Boolean);
+    const descHtml = lines.length > 1
+      ? `<ul class="exp-bullets">${lines.map(l => `<li>${escapeHTML(l)}</li>`).join('')}</ul>`
+      : `<p class="activity-desc">${escapeHTML(item.description)}</p>`;
 
-  container.innerHTML = list.map(item => `
-    <div class="cred-card" style="margin-bottom: 12px;">
-      <div>
-        <h4 class="cred-title">${escapeHTML(item.title)}</h4>
-        <div class="cred-meta">${escapeHTML(item.duration || '')}</div>
-        <p class="timeline-desc" style="margin-top: 8px;">${escapeHTML(item.description)}</p>
-      </div>
-    </div>
-  `).join('');
+    return `
+      <article class="activity-card">
+        <div class="activity-header-row">
+          <h3 class="activity-title">${escapeHTML(item.title)}</h3>
+          ${item.duration ? `<span class="timeline-date-chip">${escapeHTML(item.duration)}</span>` : ''}
+        </div>
+        ${descHtml}
+      </article>
+    `;
+  }).join('');
 }
 
 /**
- * Render News Timeline
+ * Render News Timeline / Changelog Ledger
  */
 function renderNews(newsList) {
-  const section = document.getElementById('news-section');
-  const container = document.getElementById('news-list');
+  const container = document.getElementById('news-ledger');
+  const expandWrap = document.getElementById('news-expand-wrap');
+  const expandBtn = document.getElementById('btn-news-expand');
+  if (!container || !newsList || newsList.length === 0) return;
 
-  if (!newsList || newsList.length === 0) {
-    if (section) section.style.display = 'none';
-    return;
+  let showAll = false;
+
+  function renderRows() {
+    const visibleItems = showAll ? newsList : newsList.slice(0, 6);
+    container.innerHTML = visibleItems.map(item => `
+      <div class="news-ledger-row">
+        <span class="news-date">${escapeHTML(item.date)}</span>
+        <span class="news-message">${escapeHTML(item.text)}</span>
+      </div>
+    `).join('');
+
+    if (newsList.length > 6) {
+      if (expandWrap) expandWrap.style.display = 'block';
+      if (expandBtn) {
+        expandBtn.textContent = showAll ? 'Show fewer updates' : `Show older updates (${newsList.length - 6} more)`;
+      }
+    } else if (expandWrap) {
+      expandWrap.style.display = 'none';
+    }
   }
 
-  container.innerHTML = newsList.map(item => `
-    <div class="news-item">
-      <span class="news-date">${escapeHTML(item.date)}</span>
-      <span class="news-text">${escapeHTML(item.text)}</span>
-    </div>
-  `).join('');
+  if (expandBtn) {
+    expandBtn.onclick = () => {
+      showAll = !showAll;
+      renderRows();
+    };
+  }
+
+  renderRows();
 }
 
 /**
