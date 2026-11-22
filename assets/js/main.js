@@ -656,7 +656,7 @@ function renderNews(newsList) {
 }
 
 /**
- * Render Footer
+ * Render Terminal Bookend Footer
  */
 function renderFooter(profile) {
   const nameEl = document.getElementById('footer-name');
@@ -669,12 +669,49 @@ function renderFooter(profile) {
     copyEl.textContent = new Date().getFullYear();
   }
 
+  const statementEl = document.getElementById('footer-statement');
+  if (statementEl && profile?.status) {
+    const raw = profile.status;
+    let lightPart = 'Open to';
+    let boldPart = 'software engineering internships.';
+    if (raw.toLowerCase().startsWith('open to')) {
+      lightPart = 'Open to';
+      boldPart = raw.substring(7).trim();
+    } else {
+      const words = raw.split(' ');
+      if (words.length > 2) {
+        lightPart = words.slice(0, 2).join(' ');
+        boldPart = words.slice(2).join(' ');
+      } else {
+        boldPart = raw;
+        lightPart = '';
+      }
+    }
+    statementEl.innerHTML = `
+      ${lightPart ? `<span class="phrase-light">${escapeHTML(lightPart)}</span>` : ''}
+      <span class="phrase-bold">${escapeHTML(boldPart)}</span>
+    `;
+  }
+
+  const emailBtn = document.getElementById('footer-email-btn');
+  if (emailBtn && profile?.socials) {
+    const emailObj = profile.socials.find(s => s.platform.toLowerCase().includes('mail'));
+    if (emailObj && emailObj.url) {
+      const mailto = emailObj.url.startsWith('mailto:') ? emailObj.url : 'mailto:' + emailObj.url;
+      emailBtn.href = mailto;
+    }
+  }
+
   const socialsContainer = document.getElementById('footer-socials');
   if (socialsContainer && Array.isArray(profile?.socials)) {
     socialsContainer.innerHTML = profile.socials.map(s => {
       const iconSvg = getSocialIconSvg(s.platform);
+      let href = s.url || '';
+      if (s.platform.toLowerCase().includes('mail') && !href.startsWith('mailto:')) {
+        href = 'mailto:' + href;
+      }
       return `
-        <a href="${escapeHTML(s.url)}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="${escapeHTML(s.platform)}" aria-label="${escapeHTML(s.platform)}">
+        <a href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="${escapeHTML(s.platform)}" aria-label="${escapeHTML(s.platform)} (opens in a new tab)">
           ${iconSvg}
         </a>
       `;
