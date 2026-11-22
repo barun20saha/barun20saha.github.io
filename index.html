@@ -25,7 +25,8 @@
   <script>
     (function() {
       try {
-        const stored = localStorage.getItem('theme');
+        const urlTheme = new URLSearchParams(window.location.search).get('theme');
+        const stored = urlTheme || localStorage.getItem('theme');
         const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {}
