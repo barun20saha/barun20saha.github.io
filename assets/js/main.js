@@ -5,7 +5,9 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initPortfolio();
+  if (document.getElementById('hero')) {
+    initPortfolio();
+  }
 });
 
 async function initPortfolio() {
@@ -332,8 +334,8 @@ function renderAbout(profile, education) {
 /**
  * Render Grouped Skills (definition rows with group name left and tags right)
  */
-function renderSkills(skills) {
-  const container = document.getElementById('skills-grid');
+function renderSkills(skills, containerOverride = null) {
+  const container = containerOverride || document.getElementById('skills-grid');
   if (!container || !skills) return;
 
   const categoryLabels = {
@@ -394,8 +396,8 @@ function generateProjectTerminalCover(project) {
  * Render Projects
  * Featured project as full-width slab, other projects as two-column card grid
  */
-function renderProjects(projects) {
-  const container = document.getElementById('projects-grid');
+function renderProjects(projects, containerOverride = null) {
+  const container = containerOverride || document.getElementById('projects-grid');
   if (!container || !projects || projects.length === 0) return;
 
   const featuredProject = projects.find(p => p.featured) || projects[0];
@@ -471,8 +473,8 @@ function renderProjects(projects) {
 /**
  * Render Experience Timeline
  */
-function renderExperience(experienceList) {
-  const container = document.getElementById('experience-timeline');
+function renderExperience(experienceList, containerOverride = null) {
+  const container = containerOverride || document.getElementById('experience-timeline');
   if (!container || !experienceList || experienceList.length === 0) return;
 
   container.innerHTML = experienceList.map(item => {
@@ -502,8 +504,8 @@ function renderExperience(experienceList) {
 /**
  * Render Education Timeline
  */
-function renderEducation(educationList) {
-  const container = document.getElementById('education-timeline');
+function renderEducation(educationList, containerOverride = null) {
+  const container = containerOverride || document.getElementById('education-timeline');
   if (!container || !educationList || educationList.length === 0) return;
 
   container.innerHTML = educationList.map(item => `
@@ -525,9 +527,9 @@ function renderEducation(educationList) {
 /**
  * Render Combined Achievements & Certifications (white ledgers)
  */
-function renderAchievementsAndCerts(achievements, certifications) {
-  const achContainer = document.getElementById('achievements-ledger');
-  const certContainer = document.getElementById('certifications-ledger');
+function renderAchievementsAndCerts(achievements, certifications, achOverride = null, certOverride = null) {
+  const achContainer = achOverride || document.getElementById('achievements-ledger');
+  const certContainer = certOverride || document.getElementById('certifications-ledger');
 
   if (achContainer && Array.isArray(achievements)) {
     achContainer.innerHTML = achievements.map(a => `
@@ -567,8 +569,8 @@ function renderAchievementsAndCerts(achievements, certifications) {
 /**
  * Render Coding Profiles Stats Cards
  */
-function renderCodingProfiles(profiles) {
-  const container = document.getElementById('coding-profiles-grid');
+function renderCodingProfiles(profiles, containerOverride = null) {
+  const container = containerOverride || document.getElementById('coding-profiles-grid');
   if (!container || !profiles || profiles.length === 0) return;
 
   container.innerHTML = profiles.map(p => {
@@ -593,8 +595,8 @@ function renderCodingProfiles(profiles) {
 /**
  * Render Extracurricular & Leadership
  */
-function renderExtracurricular(list) {
-  const container = document.getElementById('extracurricular-list');
+function renderExtracurricular(list, containerOverride = null) {
+  const container = containerOverride || document.getElementById('extracurricular-list');
   if (!container || !list || list.length === 0) return;
 
   container.innerHTML = list.map(item => {
@@ -618,10 +620,10 @@ function renderExtracurricular(list) {
 /**
  * Render News Timeline / Changelog Ledger
  */
-function renderNews(newsList) {
-  const container = document.getElementById('news-ledger');
-  const expandWrap = document.getElementById('news-expand-wrap');
-  const expandBtn = document.getElementById('btn-news-expand');
+function renderNews(newsList, containerOverride = null) {
+  const container = containerOverride || document.getElementById('news-ledger');
+  const expandWrap = containerOverride ? null : document.getElementById('news-expand-wrap');
+  const expandBtn = containerOverride ? null : document.getElementById('btn-news-expand');
   if (!container || !newsList || newsList.length === 0) return;
 
   let showAll = false;
