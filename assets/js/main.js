@@ -285,49 +285,217 @@ function renderHeroProfile(profile) {
 
 /**
  * Render About section & Quick facts
+ * Left: large statement (weight 300 olive + weight 700 bold key phrases)
+ * Right: facts as a clean code block
  */
 function renderAbout(profile, education) {
-  const section = document.getElementById('about-section');
-  if (!profile && (!education || education.length === 0)) {
-    if (section) section.style.display = 'none';
-    return;
+  const statementEl = document.getElementById('about-bio-statement');
+  const factsEl = document.getElementById('about-facts-block');
+  if (!profile) return;
+
+  if (statementEl && profile.bio) {
+    let bioHtml = escapeHTML(profile.bio);
+    const keyPhrases = [
+      'reliable and scalable software solutions',
+      'programming, data structures, databases, and modern development technologies',
+      'software engineering and application development'
+    ];
+    keyPhrases.forEach(phrase => {
+      const escaped = escapeHTML(phrase);
+      if (bioHtml.includes(escaped)) {
+        bioHtml = bioHtml.replace(escaped, `<strong class="phrase-bold">${escaped}</strong>`);
+      }
+    });
+    statementEl.innerHTML = `<p class="statement-text">${bioHtml}</p>`;
   }
 
-  const bioEl = document.getElementById('about-bio-text');
-  if (bioEl && profile && profile.bio) {
-    bioEl.textContent = profile.bio;
-  }
-
-  const factsContainer = document.getElementById('quick-facts-list');
-  if (factsContainer) {
+  if (factsEl) {
     const facts = [];
-    if (profile?.location) facts.push({ label: 'Location', value: profile.location });
+    if (profile.location) facts.push({ key: 'location', val: profile.location });
     if (education && education.length > 0) {
-      facts.push({ label: 'Current Education', value: `${education[0].degree} (${education[0].years})` });
-      if (education[0].score) facts.push({ label: 'Academic Standing', value: education[0].score });
+      facts.push({ key: 'education', val: `${education[0].degree.replace('in Computer Science & Engineering', 'CSE')}, ${education[0].years}` });
+      if (education[0].score) {
+        facts.push({ key: 'cgpa', val: education[0].score.replace('CGPA:', '').trim() });
+      }
     }
-    if (profile?.tagline) facts.push({ label: 'Primary Focus', value: profile.tagline });
+    facts.push({ key: 'focus', val: 'Practical & scalable software' });
 
-    factsContainer.innerHTML = facts.map(f => `
-      <li class="quick-fact-item">
-        <span class="quick-fact-label">${escapeHTML(f.label)}</span>
-        <span class="quick-fact-value">${escapeHTML(f.value)}</span>
-      </li>
+    factsEl.innerHTML = facts.map(f => `
+      <div class="fact-row">
+        <span class="fact-key">${escapeHTML(f.key)}</span>
+        <span class="fact-val">${escapeHTML(f.val)}</span>
+      </div>
     `).join('');
   }
+}
+
+/**
+ * Render Grouped Skills (definition rows with group name left and tags right)
+ */
+function renderSkills(skills) {
+  const container = document.getElementById('skills-grid');
+  if (!container || !skills) return;
+
+  const categoryLabels = {
+    languages: 'Programming languages',
+    webDev: 'Web and frameworks',
+    databases: 'Databases and storage',
+    toolsPlatforms: 'Tools and platforms',
+    coreCS: 'Core computer science'
+  };
+
+  const rows = Object.entries(skills)
+    .filter(([_, list]) => Array.isArray(list) && list.length > 0)
+    .map(([key, list]) => {
+      const title = categoryLabels[key] || formatKeyTitle(key);
+      const tags = list.map(item => `<span class="skill-tag">${escapeHTML(item)}</span>`).join('');
+      return `
+        <div class="skills-row">
+          <div class="skills-row-name"><h3>${escapeHTML(title)}</h3></div>
+          <div class="skills-row-tags">${tags}</div>
+        </div>
+      `;
+    }).join('');
+
+  container.innerHTML = rows;
+}
+
+/**
+ * Generates an accurate per-project terminal cover from the project's own data
+ */
+function generateProjectTerminalCover(project) {
+  const slug = (project.title || 'project').toLowerCase().replace(/[^a-z0-9]/g, '-');
+  const techList = Array.isArray(project.tech) && project.tech.length > 0
+    ? project.tech.slice(0, 4).join(', ')
+    : 'Python, System';
+
+  return `
+    <div class="project-term-cover" aria-hidden="true">
+      <div class="term-mini-header">
+        <div class="terminal-dots">
+          <span class="terminal-dot dot-red"></span>
+          <span class="terminal-dot dot-yellow"></span>
+          <span class="terminal-dot dot-green"></span>
+        </div>
+        <div class="term-mini-title">${escapeHTML(slug)}.sh</div>
+        <div style="width: 36px;"></div>
+      </div>
+      <div class="term-mini-body">
+        <div class="term-mini-line"><span class="cmd-prompt">$</span> run ${escapeHTML(slug)} --env=prod</div>
+        <div class="term-mini-log">&gt; Stack: ${escapeHTML(techList)}</div>
+        <div class="term-mini-log">&gt; Initialized successfully</div>
+        <div class="term-mini-log term-mini-ok">&gt; [OK] active &amp; healthy</div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Render Projects
+ * Featured project as full-width slab, other projects as two-column card grid
+ */
+function renderProjects(projects) {
+  const container = document.getElementById('projects-grid');
+  if (!container || !projects || projects.length === 0) return;
+
+  const featuredProject = projects.find(p => p.featured) || projects[0];
+  const otherProjects = projects.filter(p => p !== featuredProject);
+
+  function renderActionButtons(p) {
+    let actionsHtml = '';
+    if (p.githubUrl) {
+      actionsHtml += `
+        <a href="${escapeHTML(p.githubUrl)}" target="_blank" rel="noopener noreferrer" class="btn-project" aria-label="Source code for ${escapeHTML(p.title)} (opens in a new tab)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Source code
+        </a>
+      `;
+    }
+    if (p.liveUrl) {
+      actionsHtml += `
+        <a href="${escapeHTML(p.liveUrl)}" target="_blank" rel="noopener noreferrer" class="btn-project" aria-label="Live demo for ${escapeHTML(p.title)} (opens in a new tab)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          Live demo
+        </a>
+      `;
+    }
+    return actionsHtml;
+  }
+
+  function renderProjectCover(p) {
+    // Prevent mismatched covers (e.g. SatQuery AI showing hyperlog cover)
+    if (p.image && !p.image.includes('hyperlog') || (p.image && p.title.toLowerCase().includes('hyperlog'))) {
+      return `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.title)}" loading="lazy">`;
+    }
+    return generateProjectTerminalCover(p);
+  }
+
+  const featuredHtml = featuredProject ? `
+    <article class="featured-slab">
+      <div class="featured-cover-wrap">
+        <span class="featured-badge">Featured</span>
+        ${renderProjectCover(featuredProject)}
+      </div>
+      <div class="featured-content">
+        <h3 class="featured-title">${escapeHTML(featuredProject.title)}</h3>
+        <p class="featured-desc">${escapeHTML(featuredProject.description)}</p>
+        ${Array.isArray(featuredProject.tech) ? `<div class="project-tags">${featuredProject.tech.map(t => `<span class="tech-tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
+        <div class="project-actions">
+          ${renderActionButtons(featuredProject)}
+        </div>
+      </div>
+    </article>
+  ` : '';
+
+  const otherHtml = otherProjects.length > 0 ? `
+    <div class="projects-grid">
+      ${otherProjects.map(p => `
+        <article class="project-card">
+          <div class="project-cover-wrap">
+            ${renderProjectCover(p)}
+          </div>
+          <h3 class="project-title">${escapeHTML(p.title)}</h3>
+          <p class="project-desc">${escapeHTML(p.description)}</p>
+          ${Array.isArray(p.tech) ? `<div class="project-tags">${p.tech.map(t => `<span class="tech-tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
+          <div class="project-actions">
+            ${renderActionButtons(p)}
+          </div>
+        </article>
+      `).join('')}
+    </div>
+  ` : '';
+
+  container.innerHTML = featuredHtml + otherHtml;
+}
+
+/**
+ * Render Experience Timeline
+ */
+function renderExperience(experienceList) {
+  const container = document.getElementById('experience-timeline');
+  if (!container || !experienceList || experienceList.length === 0) return;
+
+  container.innerHTML = experienceList.map(item => `
+    <div class="timeline-item">
+      <div class="timeline-marker" aria-hidden="true"></div>
+      <div class="timeline-card">
+        <div class="timeline-header-row">
+          <h3 class="timeline-title">${escapeHTML(item.role)}</h3>
+          <span class="timeline-badge">${escapeHTML(item.duration)}</span>
+        </div>
+        <div class="timeline-subtitle">${escapeHTML(item.org)}${item.location ? ` • ${escapeHTML(item.location)}` : ''}</div>
+        <p class="timeline-desc">${escapeHTML(item.description)}</p>
+      </div>
+    </div>
+  `).join('');
 }
 
 /**
  * Render Education Timeline
  */
 function renderEducation(educationList) {
-  const section = document.getElementById('education-section');
   const container = document.getElementById('education-timeline');
-
-  if (!educationList || educationList.length === 0) {
-    if (section) section.style.display = 'none';
-    return;
-  }
+  if (!container || !educationList || educationList.length === 0) return;
 
   container.innerHTML = educationList.map(item => `
     <div class="timeline-item">
@@ -340,128 +508,6 @@ function renderEducation(educationList) {
         <div class="timeline-subtitle">${escapeHTML(item.institute)}</div>
         ${item.score ? `<div class="timeline-score">${escapeHTML(item.score)}</div>` : ''}
         ${item.details ? `<p class="timeline-desc">${escapeHTML(item.details)}</p>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-/**
- * Render Grouped Skills Clusters
- */
-function renderSkills(skills) {
-  const section = document.getElementById('skills-section');
-  const container = document.getElementById('skills-grid');
-
-  if (!skills || Object.keys(skills).length === 0) {
-    if (section) section.style.display = 'none';
-    return;
-  }
-
-  const categoryLabels = {
-    languages: 'Programming Languages',
-    webDev: 'Web & Frameworks',
-    databases: 'Databases & Storage',
-    toolsPlatforms: 'Tools & Platforms',
-    coreCS: 'Core Computer Science'
-  };
-
-  const clustersHtml = Object.entries(skills)
-    .filter(([_, list]) => Array.isArray(list) && list.length > 0)
-    .map(([key, list]) => {
-      const title = categoryLabels[key] || formatKeyTitle(key);
-      const chipsHtml = list.map(skill => `<span class="skill-chip">${escapeHTML(skill)}</span>`).join('');
-      return `
-        <div class="skill-cluster-card">
-          <h3 class="skill-cluster-title">${escapeHTML(title)}</h3>
-          <div class="skill-chips">
-            ${chipsHtml}
-          </div>
-        </div>
-      `;
-    }).join('');
-
-  if (clustersHtml) {
-    container.innerHTML = clustersHtml;
-  } else if (section) {
-    section.style.display = 'none';
-  }
-}
-
-/**
- * Render Projects Grid
- */
-function renderProjects(projects) {
-  const section = document.getElementById('projects-section');
-  const container = document.getElementById('projects-grid');
-
-  if (!projects || projects.length === 0) {
-    if (section) section.style.display = 'none';
-    return;
-  }
-
-  container.innerHTML = projects.map(p => {
-    const techTags = Array.isArray(p.tech) ? p.tech.map(t => `<span class="tech-tag">${escapeHTML(t)}</span>`).join('') : '';
-    const featuredClass = p.featured ? 'is-featured' : '';
-    const featuredBadge = p.featured ? '<span class="featured-badge">Featured</span>' : '';
-    const imageSrc = p.image || 'assets/img/projects/hyperlog.svg';
-
-    let linksHtml = '';
-    if (p.githubUrl) {
-      linksHtml += `
-        <a href="${escapeHTML(p.githubUrl)}" target="_blank" rel="noopener noreferrer" class="project-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          Source Code
-        </a>
-      `;
-    }
-    if (p.liveUrl) {
-      linksHtml += `
-        <a href="${escapeHTML(p.liveUrl)}" target="_blank" rel="noopener noreferrer" class="project-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-          Live Demo
-        </a>
-      `;
-    }
-
-    return `
-      <article class="project-card ${featuredClass}">
-        <div class="project-image-wrapper">
-          ${featuredBadge}
-          <img src="${escapeHTML(imageSrc)}" alt="${escapeHTML(p.title)}" loading="lazy">
-        </div>
-        <div class="project-content">
-          <h3 class="project-title">${escapeHTML(p.title)}</h3>
-          <p class="project-desc">${escapeHTML(p.description)}</p>
-          ${techTags ? `<div class="project-tech-tags">${techTags}</div>` : ''}
-          ${linksHtml ? `<div class="project-links">${linksHtml}</div>` : ''}
-        </div>
-      </article>
-    `;
-  }).join('');
-}
-
-/**
- * Render Experience Timeline
- */
-function renderExperience(experienceList) {
-  const section = document.getElementById('experience-section');
-  const container = document.getElementById('experience-timeline');
-
-  if (!experienceList || experienceList.length === 0) {
-    if (section) section.style.display = 'none';
-    return;
-  }
-
-  container.innerHTML = experienceList.map(item => `
-    <div class="timeline-item">
-      <div class="timeline-marker" aria-hidden="true"></div>
-      <div class="timeline-card">
-        <div class="timeline-header-row">
-          <h3 class="timeline-title">${escapeHTML(item.role)}</h3>
-          <span class="timeline-badge">${escapeHTML(item.duration)}</span>
-        </div>
-        <div class="timeline-subtitle">${escapeHTML(item.org)}${item.location ? ` • ${escapeHTML(item.location)}` : ''}</div>
-        <p class="timeline-desc">${escapeHTML(item.description)}</p>
       </div>
     </div>
   `).join('');

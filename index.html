@@ -214,14 +214,10 @@
           <h2 id="about-heading">About</h2>
           <p class="section-desc">Background, current studies and software focus.</p>
         </header>
-        <div class="about-grid">
-          <div class="about-card">
-            <p id="about-bio-text" class="about-bio"></p>
-          </div>
-          <div class="quick-facts-card">
-            <ul id="quick-facts-list" class="quick-facts-list">
-              <!-- Facts injected via JS -->
-            </ul>
+        <div class="about-layout">
+          <div id="about-bio-statement" class="about-statement"></div>
+          <div class="about-facts-wrap">
+            <div id="about-facts-block" class="facts-code-block" role="region" aria-label="Key Facts"></div>
           </div>
         </div>
       </div>
@@ -234,8 +230,8 @@
           <h2 id="skills-heading">Skills</h2>
           <p class="section-desc">The languages, tools and fundamentals I work with.</p>
         </header>
-        <div id="skills-grid" class="skills-grid">
-          <!-- Clustered tags injected via JS -->
+        <div id="skills-grid" class="skills-rows">
+          <!-- Injected via JS as definition rows -->
         </div>
       </div>
     </section>
@@ -247,8 +243,8 @@
           <h2 id="projects-heading">Projects</h2>
           <p class="section-desc">Systems and applications I have built.</p>
         </header>
-        <div id="projects-grid" class="projects-grid">
-          <!-- Project cards injected via JS -->
+        <div id="projects-grid" class="projects-layout">
+          <!-- Injected via JS: Featured slab + project cards -->
         </div>
       </div>
     </section>
