@@ -42,8 +42,7 @@ async function initPortfolio() {
 
     // Setup interactive events
     initThemeToggle();
-    setupNavScrollSpy();
-    setupMobileNav();
+    setupHeaderAndMobileNav(data.profile);
 
     // Hide loader, show content
     if (loadingEl) loadingEl.style.display = 'none';
@@ -729,10 +728,21 @@ function initThemeToggle() {
   const toggleBtn = document.getElementById('theme-toggle');
   if (!toggleBtn) return;
 
+  const sunSpan = toggleBtn.querySelector('.theme-toggle__sun');
+  const moonSpan = toggleBtn.querySelector('.theme-toggle__moon');
+  if (sunSpan && window.Icons) sunSpan.innerHTML = window.Icons.svg('sun', { size: 20 });
+  if (moonSpan && window.Icons) moonSpan.innerHTML = window.Icons.svg('moon', { size: 20 });
+
   const getTheme = () => document.documentElement.getAttribute('data-theme') || 'light';
+
+  const updateAria = (theme) => {
+    toggleBtn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  };
+  updateAria(getTheme());
 
   const setTheme = (theme) => {
     document.documentElement.setAttribute('data-theme', theme);
+    updateAria(theme);
     try {
       localStorage.setItem('theme', theme);
     } catch (e) {}
@@ -750,105 +760,103 @@ function initThemeToggle() {
 }
 
 /**
- * Navigation Scroll Spy & Smooth Link Handling
- * Ensures no nav item is active while at the top (hero)
+ * Full-width Header Scroll Progress, Scroll Spy & Mobile Menu
  */
-function setupNavScrollSpy() {
-  const navLinks = document.querySelectorAll('.desktop-nav .nav-link[href^="#"]');
-  const sections = [];
+function setupHeaderAndMobileNav(profile) {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  const bar = header.querySelector('.scroll-progress span');
+  const toggle = header.querySelector('.nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const root = document.documentElement;
 
-  navLinks.forEach(link => {
-    const id = link.getAttribute('href').substring(1);
-    const sec = document.getElementById(id);
-    if (sec) sections.push({ id, element: sec, link });
-  });
+  if (profile) {
+    const headerResume = document.getElementById('header-resume-btn');
+    if (headerResume && profile.resumeUrl) {
+      headerResume.href = profile.resumeUrl;
+      headerResume.innerHTML = (window.Icons ? window.Icons.svg('file-text', { size: 16 }) : '') + '<span>View resume</span>';
+    }
+    const mobileResume = document.getElementById('mobile-menu-resume-btn');
+    if (mobileResume && profile.resumeUrl) {
+      mobileResume.href = profile.resumeUrl;
+    }
+    const mobileEmail = document.getElementById('mobile-menu-email');
+    if (mobileEmail) {
+      const mail = (profile.socials || []).find(s => s.platform.toLowerCase().includes('mail') || (s.url && s.url.includes('@')));
+      if (mail) {
+        const addr = mail.url.replace(/^mailto:/, '');
+        mobileEmail.href = 'mailto:' + addr;
+        mobileEmail.textContent = addr;
+      }
+    }
+    const mobileSocials = document.getElementById('mobile-menu-socials');
+    if (mobileSocials && Array.isArray(profile.socials)) {
+      mobileSocials.innerHTML = profile.socials
+        .filter(s => !s.platform.toLowerCase().includes('mail'))
+        .map(s => {
+          let href = s.url || '';
+          return `
+            <a href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="${escapeHTML(s.platform)} (opens in a new tab)">
+              ${window.Icons ? window.Icons.svg(window.Icons.forUrl(href), { size: 20 }) : ''}
+            </a>
+          `;
+        }).join('');
+    }
+  }
 
+  // 1. scrolled state + progress (one rAF-throttled handler)
+  let ticking = false;
   const onScroll = () => {
-    // If we are above the first real section (in Hero), clear active state
-    const firstSectionTop = sections.length > 0 ? sections[0].element.offsetTop : 300;
-    if (window.scrollY < firstSectionTop - 150) {
-      navLinks.forEach(l => l.classList.remove('active'));
-      return;
-    }
-
-    const scrollPos = window.scrollY + 140;
-    for (let i = sections.length - 1; i >= 0; i--) {
-      const { element, link } = sections[i];
-      if (element.offsetTop <= scrollPos) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        break;
-      }
-    }
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      header.dataset.scrolled = String(y > 8);
+      const max = root.scrollHeight - window.innerHeight;
+      if (bar) bar.style.setProperty('--p', max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
+      ticking = false;
+    });
   };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-}
-
-/**
- * Mobile Navigation Drawer Toggle & Focus Trap
- */
-function setupMobileNav() {
-  const toggleBtn = document.querySelector('.nav-toggle');
-  const navDrawer = document.getElementById('mobile-nav-drawer');
-  const closeBtn = document.getElementById('mobile-nav-close');
-  const backdrop = navDrawer ? navDrawer.querySelector('.mobile-nav-backdrop') : null;
-
-  if (!toggleBtn || !navDrawer) return;
-
-  function openMenu() {
-    navDrawer.classList.add('is-open');
-    navDrawer.setAttribute('aria-hidden', 'false');
-    toggleBtn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-    const firstFocusable = navDrawer.querySelector('button, a');
-    if (firstFocusable) firstFocusable.focus();
-  }
-
-  function closeMenu() {
-    navDrawer.classList.remove('is-open');
-    navDrawer.setAttribute('aria-hidden', 'true');
-    toggleBtn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-    toggleBtn.focus();
-  }
-
-  toggleBtn.addEventListener('click', () => {
-    if (navDrawer.classList.contains('is-open')) closeMenu();
-    else openMenu();
+  // 2. scroll-spy: no item is active while the hero is on screen
+  const links = [...document.querySelectorAll('.nav a[href^="#"], .mobile-menu a[href^="#"]')];
+  const setActive = (id) => links.forEach(a => {
+    const on = a.getAttribute('href') === '#' + id;
+    a.classList.toggle('is-active', on);
+    on ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current');
   });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main section[id], #top, #hero').forEach(s => io.observe(s));
 
-  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-  if (backdrop) backdrop.addEventListener('click', closeMenu);
-
-  navDrawer.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', closeMenu);
-  });
-
-  window.addEventListener('keydown', (e) => {
-    if (!navDrawer.classList.contains('is-open')) return;
-
-    if (e.key === 'Escape') {
-      closeMenu();
-      return;
-    }
-
+  // 3. mobile menu
+  if (!toggle || !menu) return;
+  const focusables = () => [...menu.querySelectorAll('a[href], button')];
+  const setMenu = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.classList.toggle('is-open', open);
+    menu.inert = !open;
+    root.classList.toggle('menu-open', open);
+    toggle.innerHTML = window.Icons ? window.Icons.svg(open ? 'x' : 'menu') : '';
+    if (open) focusables()[0]?.focus(); else toggle.focus({ preventScroll: true });
+  };
+  menu.inert = true;
+  toggle.innerHTML = window.Icons ? window.Icons.svg('menu') : '';
+  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a[href^="#"]')) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (!menu.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { setMenu(false); return; }
     if (e.key === 'Tab') {
-      const focusables = navDrawer.querySelectorAll('button, a[href]');
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
+      const f = focusables(), first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); toggle.focus(); }
+      else if (!e.shiftKey && document.activeElement === toggle) { e.preventDefault(); first.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); toggle.focus(); }
     }
   });
+  matchMedia('(min-width: 1100px)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
 }
 
 /**

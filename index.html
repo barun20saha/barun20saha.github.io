@@ -42,70 +42,62 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- Accessibility Skip Link -->
-  <a href="#main-content" class="skip-link">Skip to content</a>
-
-  <!-- Floating Sticky Pill Navigation -->
-  <div class="nav-wrapper">
-    <header class="site-nav">
-      <a href="#hero" class="brand-link" aria-label="Barun Saha - Home">
-        <span class="brand-prompt">&gt;_</span>
-        <span>barun.saha</span>
+  <!-- Accessibility Skip Link & Site Header -->
+  <header class="site-header" data-scrolled="false">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="site-header__bar">
+      <a class="brand" href="#top" aria-label="Barun Saha, back to top">
+        <svg class="brand__mark" viewBox="0 0 64 64" width="32" height="32" aria-hidden="true" focusable="false">
+          <rect width="64" height="64" rx="14" fill="#14171F"/>
+          <path d="M14 14V50M14 14H27A9 9 0 0 1 27 32H14M14 32H29A9 9 0 0 1 29 50H14" fill="none" stroke="#FFFAE7" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="44" y="47" width="12" height="6" rx="2" fill="#2DD4BF"/>
+        </svg>
+        <span class="brand__name">barun.saha</span>
       </a>
 
-      <nav class="desktop-nav" aria-label="Main Navigation">
-        <ul class="nav-links">
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#skills" class="nav-link">Skills</a></li>
-          <li><a href="#projects" class="nav-link">Projects</a></li>
-          <li><a href="#experience" class="nav-link">Experience</a></li>
-          <li><a href="#education" class="nav-link">Education</a></li>
-          <li><a href="#achievements" class="nav-link">Achievements</a></li>
-          <li><a href="#profiles" class="nav-link">Profiles</a></li>
-          <li><a href="#news" class="nav-link">News</a></li>
-        </ul>
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#achievements">Achievements</a>
+        <a href="#profiles">Profiles</a>
+        <a href="#news">News</a>
       </nav>
 
-      <div class="nav-actions">
-        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle color theme" title="Toggle theme">
-          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <div class="site-header__actions">
+        <button class="icon-btn theme-toggle" type="button" id="theme-toggle" aria-label="Switch to dark theme">
+          <span class="theme-toggle__sun"></span><span class="theme-toggle__moon"></span>
         </button>
-
-        <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-    </header>
-  </div>
-
-  <!-- Mobile Drawer Navigation -->
-  <div id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
-    <div class="mobile-nav-backdrop"></div>
-    <div class="mobile-nav-content">
-      <div class="mobile-nav-header">
-        <a href="#hero" class="brand-link" aria-label="Barun Saha - Home">
-          <span class="brand-prompt">&gt;_</span>
-          <span>barun.saha</span>
+        <a class="btn btn--primary btn--sm site-header__resume" id="header-resume-btn" href="assets/files/resume.pdf" target="_blank" rel="noopener noreferrer">
+          View resume
         </a>
-        <button id="mobile-nav-close" class="mobile-nav-close-btn" aria-label="Close navigation menu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
         </button>
       </div>
-      <ul class="mobile-nav-links">
-        <li><a href="#about" class="mobile-nav-link">About</a></li>
-        <li><a href="#skills" class="mobile-nav-link">Skills</a></li>
-        <li><a href="#projects" class="mobile-nav-link">Projects</a></li>
-        <li><a href="#experience" class="mobile-nav-link">Experience</a></li>
-        <li><a href="#education" class="mobile-nav-link">Education</a></li>
-        <li><a href="#achievements" class="mobile-nav-link">Achievements</a></li>
-        <li><a href="#profiles" class="mobile-nav-link">Profiles</a></li>
-        <li><a href="#news" class="mobile-nav-link">News</a></li>
-      </ul>
+    </div>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  </header>
+
+  <!-- Mobile Menu (Full-screen sheet below header) -->
+  <div class="mobile-menu" id="mobile-menu" inert>
+    <nav aria-label="Mobile">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#profiles">Profiles</a>
+      <a href="#news">News</a>
+    </nav>
+    <div class="mobile-menu__foot">
+      <a class="btn btn--primary" id="mobile-menu-resume-btn" href="assets/files/resume.pdf" target="_blank" rel="noopener noreferrer">View resume</a>
+      <div class="mobile-menu__row">
+        <a class="mobile-menu__email" id="mobile-menu-email" href="mailto:barun20.saha@gmail.com">barun20.saha@gmail.com</a>
+        <div class="mobile-menu__social" id="mobile-menu-socials"></div>
+      </div>
     </div>
   </div>
 
