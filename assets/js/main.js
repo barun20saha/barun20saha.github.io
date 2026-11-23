@@ -296,7 +296,19 @@ function renderAbout(profile, education) {
   if (!profile) return;
 
   if (statementEl && profile.bio) {
-    statementEl.innerHTML = `<p class="statement-text">${escapeHTML(profile.bio)}</p>`;
+    let bioHtml = escapeHTML(profile.bio);
+    const keyPhrases = [
+      'software engineering and application development',
+      'reliable and scalable software solutions',
+      'programming, data structures, databases, and modern development technologies'
+    ];
+    keyPhrases.forEach(phrase => {
+      const escaped = escapeHTML(phrase);
+      if (bioHtml.includes(escaped)) {
+        bioHtml = bioHtml.replace(escaped, `<strong class="phrase-bold">${escaped}</strong>`);
+      }
+    });
+    statementEl.innerHTML = `<p class="statement-text">${bioHtml}</p>`;
   }
 
   if (factsEl) {
@@ -444,11 +456,13 @@ function renderProjects(projects, containerOverride = null) {
           <div class="project-cover-wrap">
             ${renderProjectCover(p)}
           </div>
-          <h3 class="project-title">${escapeHTML(p.title)}</h3>
-          <p class="project-desc">${escapeHTML(p.description)}</p>
-          ${Array.isArray(p.tech) ? `<div class="project-tags">${p.tech.map(t => `<span class="tech-tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
-          <div class="project-actions">
-            ${renderActionButtons(p)}
+          <div class="project-card-content">
+            <h3 class="project-title">${escapeHTML(p.title)}</h3>
+            <p class="project-desc">${escapeHTML(p.description)}</p>
+            ${Array.isArray(p.tech) ? `<div class="project-tags">${p.tech.map(t => `<span class="tech-tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
+            <div class="project-actions">
+              ${renderActionButtons(p)}
+            </div>
           </div>
         </article>
       `).join('')}
