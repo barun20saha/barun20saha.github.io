@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('hero')) {
+  if (document.getElementById('top') || document.getElementById('hero') || document.getElementById('main-content')) {
     initPortfolio();
   }
 });
@@ -143,7 +143,7 @@ function initTerminalTyper(data) {
     renderFinal();
   };
 
-  const heroSection = document.getElementById('hero');
+  const heroSection = document.getElementById('top') || document.getElementById('hero');
   if (heroSection) {
     heroSection.addEventListener('click', skipSequence, { once: true });
     heroSection.addEventListener('keydown', skipSequence, { once: true });
