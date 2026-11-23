@@ -83,13 +83,21 @@
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  --container: 1200px;
-  --measure: 62ch;
+  --header-h:    72px;
+  --gutter:      clamp(16px, 4vw, 72px);                   /* left and right page padding */
+  --gutter-l:    max(var(--gutter), env(safe-area-inset-left));
+  --gutter-r:    max(var(--gutter), env(safe-area-inset-right));
+  --col-gap:     clamp(16px, 2vw, 40px);
+  --section-gap: clamp(64px, 8vw, 104px);
+  --header-gap:  clamp(24px, 3vw, 36px);
+  --measure:     62ch;                                      /* only for paragraph text, left-aligned */
 
   /* Transitions */
   --t-fast: 150ms ease-out;
   --t-normal: 200ms ease-out;
 }
+
+@media (max-width: 767px) { :root { --header-h: 60px; } }
 
 [data-theme="dark"] {
   color-scheme: dark;
@@ -125,17 +133,21 @@
 }
 
 html {
+  font-size: clamp(16px, 14px + 0.28vw, 20px);   /* scales gently up on big screens, 16px minimum */
   scroll-behavior: smooth;
-  scroll-padding-top: calc(80px + var(--s-4));
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  scrollbar-gutter: stable;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
+  margin: 0;
+  min-width: 320px;
   font-family: var(--font-display);
   background-color: var(--bg);
   color: var(--ink);
   line-height: 1.65;
-  font-size: 1.0625rem;
   font-weight: 400;
   min-height: 100vh;
   display: flex;
@@ -204,70 +216,68 @@ button, input, textarea, select {
 }
 
 /* --------------------------------------------------------------------------
-   Layout Containers
+   Layout Containers & Grid Helpers
    -------------------------------------------------------------------------- */
-.container {
+.wrap, .container {
   width: 100%;
-  max-width: var(--container);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: clamp(16px, 4vw, 40px);
-  padding-right: clamp(16px, 4vw, 40px);
+  max-width: none;
+  margin: 0;
+  padding-inline: var(--gutter-l) var(--gutter-r);
 }
+
+.grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
 
 .site-main {
   flex: 1;
   padding-bottom: 80px;
 }
 
-.section {
-  padding-block: var(--s-9);
-}
+main > section + section { margin-top: var(--section-gap); }
+main > section { scroll-margin-top: calc(var(--header-h) + 16px); }
 
-@media (max-width: 860px) {
-  .section {
-    padding-block: var(--s-8);
-  }
+.section {
+  padding-block: 0;
 }
 
 /* --------------------------------------------------------------------------
-   Section Header Pattern (h2 left, plain one-line desc right, line beneath)
+   Section Header Pattern (title left, one plain sentence right, left-aligned text, never centred)
    -------------------------------------------------------------------------- */
 .section-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s-4);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  row-gap: var(--s-3);
+  align-items: end;
   padding-bottom: var(--s-4);
   border-bottom: 1px solid var(--line);
-  margin-bottom: var(--s-7);
+  margin-bottom: var(--header-gap);
 }
 
 .section-head h2 {
+  grid-column: 1 / span 6;
   font-size: clamp(2rem, 1.2rem + 2.6vw, 3.25rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.025em;
   color: var(--ink-strong);
+  margin: 0;
 }
 
+.section-head p,
 .section-head .section-desc {
-  font-size: 1.0625rem;
+  grid-column: 7 / -1;
+  font-size: 1rem;
   color: var(--ink-soft);
   margin: 0;
-  text-align: right;
-  max-width: 50ch;
+  text-align: left;
+  max-width: var(--measure);
 }
 
-@media (max-width: 860px) {
-  .section-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--s-2);
-    margin-bottom: var(--s-6);
-  }
+@media (max-width: 899px) {
+  .section-head h2,
+  .section-head p,
   .section-head .section-desc {
-    text-align: left;
+    grid-column: 1 / -1;
   }
 }
 
@@ -1684,7 +1694,7 @@ button, input, textarea, select {
 }
 
 .news-expand-wrap {
-  text-align: center;
+  margin-top: var(--s-4);
 }
 
 .btn-news-expand {
@@ -1846,8 +1856,7 @@ button, input, textarea, select {
    Loading & Error States
    -------------------------------------------------------------------------- */
 .loading-indicator, .error-message {
-  text-align: center;
-  padding: 60px 24px;
+  padding: 40px var(--s-5);
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r-card);
@@ -1861,7 +1870,7 @@ button, input, textarea, select {
   border-top-color: var(--signal);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin: 0 auto 16px;
+  margin-bottom: 16px;
 }
 
 @keyframes spin {
