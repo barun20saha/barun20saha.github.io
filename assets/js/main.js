@@ -939,6 +939,9 @@ function setupHeaderAndMobileNav(profile) {
   menu.inert = true;
   toggle.innerHTML = window.Icons ? window.Icons.svg('menu') : '';
   toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  if (new URLSearchParams(window.location.search).get('menu') === 'open') {
+    setTimeout(() => setMenu(true), 350);
+  }
   menu.addEventListener('click', (e) => { if (e.target.closest('a[href^="#"]')) setMenu(false); });
   document.addEventListener('keydown', (e) => {
     if (!menu.classList.contains('is-open')) return;

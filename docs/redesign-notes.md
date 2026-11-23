@@ -116,3 +116,55 @@ Content is stored on disk at `data/portfolio.json` and served/updated through Ex
 - [x] **Accessibility**: Semantic HTML5 landmarks, WCAG AA contrast, skip link, visible focus rings, ARIA labels.
 - [x] **Performance**: Preloaded self-hosted variable WOFF2 fonts, zero external runtime frameworks, native lazy loading on images, high-priority eager load on portrait.
 - [x] **Clean git history**: All work committed to `feat/portfolio-redesign-v2` across structured Conventional Commits. No secrets committed.
+
+---
+
+## 7. Version 3: Full-Width Layout, Header/Footer & Icon System Redesign (`feat/portfolio-fullwidth-v3`)
+
+### 7.1 Architecture & Layout Transformation
+- **Edge-to-Edge Fluid Shell**: Completely eliminated centred narrow container column (`--container` deleted). Layout stretches edge-to-edge with fluid viewport gutters: `clamp(16px, 4vw, 72px)`.
+- **12-Column Responsive Blueprint**:
+  - `main > section`: Wrapped in `.wrap` spanning full viewport width (`padding-inline: var(--gutter-l) var(--gutter-r)`).
+  - **About Grid**: Statement spans columns 1–8 (`max-width: 65ch` left-aligned), key facts code block sticky in columns 9–12.
+  - **Skills Rows**: Left-aligned category headers (22% column on tablet/desktop) with inline mono tags; core skills highlighted with signal tint.
+  - **Projects Dark Stage Band**: Inset band `clamp(8px, 2vw, 24px)` with inner gutters; featured slab 7fr:5fr grid; non-featured projects in 2-column grid with auto-spanning odd last card (`:last-child:nth-child(odd) { grid-column: 1 / -1; }`).
+  - **Paired Sections**:
+    - Experience & Education paired side-by-side on laptop/wide (`min-width: 1100px`) in `.wrap.pair`, stacked on mobile.
+    - Activities & News paired side-by-side on laptop/wide (`min-width: 1100px`) in `.wrap.pair`, stacked on mobile.
+  - **Profiles**: Interactive tiles using `repeat(auto-fit, minmax(min(100%, 260px), 1fr))`.
+
+### 7.2 Monogram Brand Mark & Favicon Suite
+- Designed custom geometric "B" monogram followed by a terminal cursor mark (`assets/brand/mark.svg`).
+- Generated complete favicon and manifest package via `tools/build-assets.mjs` with `sharp` and `png-to-ico`:
+  - `favicon.svg` (SVG with dark rounded rect, butter letter, teal cursor)
+  - `favicon.ico` (multi-res 16, 32, 48px)
+  - `favicon-32.png`, `apple-touch-icon.png` (safe 80% inset on square tile)
+  - `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` (safe 60% circle mask)
+  - `site.webmanifest` (PWA support, light `#FFFAE7` theme)
+
+### 7.3 Professional Icon System
+- Built unified icon registry in `assets/js/icons.js` (`window.Icons.svg` and `window.Icons.forUrl`):
+  - Lucide UI icons with stroke 1.75, round caps/joins.
+  - Simple Icons single-colour brand glyphs with `fill: currentColor`.
+  - Zero emoji icons anywhere.
+
+### 7.4 Header & Mobile Menu
+- Sticky full-width header: Brand logo far left, primary nav + theme toggle + resume button far right.
+- 2px teal scroll progress bar at the bottom border.
+- Scroll-spy observing sections with `#top` (clears active state at hero).
+- Full-screen mobile menu sheet with large display links, resume action, email, and social icon buttons.
+
+### 7.5 Structured 12-Column Footer Slab
+- Dark slab (`#14171F` / `#0B0E13`) with 32px top radius.
+- Large display CTA headline ("Open to" + bold status).
+- Copy email button with clipboard copy, fallback selection, and checkmark feedback.
+- Owner live local time (`Intl.DateTimeFormat` with `Asia/Kolkata` timezone).
+- Social links rows with platform glyph, handle, and external link affordance.
+- Smooth Back to top button pinned to far right.
+
+### 7.6 QA Verification Results
+- [x] **No horizontal scroll** verified across 320, 360, 390, 768, 1024, 1280, 1440, 1920, and 2560px.
+- [x] **Zero layout container auto-centering**: Only 1 hit across entire CSS codebase (`.empty-state-card` placeholder in admin).
+- [x] **Zero emoji icons**: Verified cleanly.
+- [x] **Screenshots**: Saved in `docs/after-v3/` for 390, 768, 1280, 1920 (light and dark full pages, header desktop/mobile, mobile menu open, footer desktop/mobile).
+- [x] **User edits restored**: Preserved TrustLens project and user certifications.

@@ -49,15 +49,16 @@
   "skills": {
     "languages": [
       "C",
-      "C++",
       "Python",
       "Java",
       "SQL",
-      "MongoDB"
+      "MongoDB",
+      "rust"
     ],
     "webDev": [
       "RESTful APIs",
-      "Spring Boot"
+      "Spring Boot",
+      "swagger"
     ],
     "databases": [
       "PostgreSQL",
@@ -97,6 +98,22 @@
       "liveUrl": "",
       "image": "assets/img/projects/hyperlog.svg",
       "featured": true
+    },
+    {
+      "title": "TrustLens",
+      "description": "TrustLens is an AI-powered web threat detection and digital trust intelligence platform that evaluates websites and online entities for security risks in real time. Built with a high-performance Rust security engine, a FastAPI gateway, PostgreSQL, and Redis, it delivers fast, cached threat assessments and trust scores through both a Vercel-hosted web dashboard and an interactive Telegram bot.",
+      "tech": [
+        "Security Engine: Rust",
+        "Python",
+        "PostgreSQL",
+        "Redis",
+        "Telegram Bot",
+        "Docker"
+      ],
+      "githubUrl": "https://github.com/swastikadass2006-cmd/Hackmatrix_adamas",
+      "liveUrl": "https://hackmatrixadamas.vercel.app/",
+      "image": "assets/img/projects/Screenshot_2026-11-22_at_15-25-33_TrustLens_____Enterprise_Cyber_Threat_Intelligence___Digital_Trust_Verification-1795341363151-5587.png",
+      "featured": false
     }
   ],
   "experience": [
@@ -110,9 +127,14 @@
   ],
   "achievements": [
     {
+      "title": "Top 20 finalist in HackMatrix",
+      "date": "2026-11",
+      "link": "https://drive.google.com/file/d/1osv7iIAbH758LnXFas_n_jMPZ1hMDCh_/view?usp=sharing"
+    },
+    {
       "title": "IEEE CIS Kolkata Chapter Summer Internship 2026",
       "date": "Jun 2026 - Aug 2026",
-      "link": ""
+      "link": "https://drive.google.com/file/d/1osv7iIAbH758LnXFas_n_jMPZ1hMDCh_/view?usp=sharing"
     },
     {
       "title": "Smart India Hackathon (SIH) — Team Red Orbit, Team Leader",
@@ -122,15 +144,33 @@
     {
       "title": "LeetCode — 200+ problems solved",
       "date": "",
-      "link": ""
+      "link": "https://leetcode.com/u/barun20/"
     }
   ],
   "certifications": [
+    {
+      "title": "Internship",
+      "issuer": "IEEE",
+      "date": "2026-08",
+      "link": "https://drive.google.com/file/d/1zREo_h8_babtM59QqhtM7ghSaMrwXlrp/view?usp=sharing"
+    },
+    {
+      "title": "AWS ai practitioner",
+      "issuer": "AWS",
+      "date": "2026-11",
+      "link": "https://drive.google.com/file/d/1s9Gi3k8-MShpnvVtfjcLDfw8E6Smbn9n/view?usp=drive_link"
+    },
     {
       "title": "Design And Analysis of Algorithm",
       "issuer": "NPTEL",
       "date": "March-2026",
       "link": "https://drive.google.com/file/d/1l0gMNLAxbA6Sx0fp9NzMHVtXLDi_KR6e/view?usp=sharing"
+    },
+    {
+      "title": "HACKMATRIX'26",
+      "issuer": "ACM",
+      "date": "2026-11",
+      "link": "https://drive.google.com/file/d/1mfVTgQJ44BVm55_h9sksDhfhFHfSOOLc/view?usp=sharing"
     },
     {
       "title": "The Ultimate Job Ready Data Science Course",
@@ -139,16 +179,16 @@
       "link": "https://drive.google.com/file/d/1UsCLcmp5oO4FYjRWtDGo1Oagdh7_UHaW/view?usp=drive_link"
     },
     {
-      "title": "Gen AI Tools",
-      "issuer": "Nasscom",
-      "date": "21/08/2026",
-      "link": "https://drive.google.com/drive/folders/1F8-Bze0b-qP0R5CutcZh7fslgnEI3b_c"
+      "title": "Bharatiya Antariksh Hakathon",
+      "issuer": "ISRO",
+      "date": "2026-08",
+      "link": "https://drive.google.com/file/d/18j2vPoNmPFS7fPaij9Lv112srdKaHb3d/view?usp=sharing"
     },
     {
-      "title": "Bharatiya Antariksh Hackathon",
-      "issuer": "ISRO",
-      "date": "August-2026",
-      "link": "https://drive.google.com/drive/folders/1F8-Bze0b-qP0R5CutcZh7fslgnEI3b_c"
+      "title": "Workshops",
+      "issuer": "GDG Kolkata",
+      "date": "2026-11",
+      "link": "https://drive.google.com/file/d/1n1FL2ffXl41GIzP0NnbjeZOtCy67qr-F/view?usp=sharing"
     }
   ],
   "codingProfiles": [
@@ -163,12 +203,6 @@
       "handle": "barun20saha",
       "stats": "10+ Repositories",
       "url": "https://github.com/barun20saha"
-    },
-    {
-      "platform": "GeeksforGeeks",
-      "handle": "barun20saha",
-      "stats": "250+ solved, institute rank 4",
-      "url": "https://auth.geeksforgeeks.org/user/barun20saha"
     }
   ],
   "extracurricular": [
@@ -176,9 +210,18 @@
       "title": "Team Leader",
       "duration": "2026",
       "description": "Led the team during the Smart India Hackathon.\nCoordinated development and task distribution.\nWorked with team members on designing and implementing the solution."
+    },
+    {
+      "title": "HACKMATRIX'26",
+      "duration": "2026-11",
+      "description": "Top 20 Finalist"
     }
   ],
   "news": [
+    {
+      "date": "2026-11",
+      "text": "AWS certified AI practitioner"
+    },
     {
       "date": "Jun 2026 - Aug 2026",
       "text": "Completed IEEE CIS Summer Internship"
@@ -190,6 +233,10 @@
     {
       "date": "2026",
       "text": "SatQuery- analyze satellite images"
+    },
+    {
+      "date": "2026-11",
+      "text": "TrustLens  is an AI-powered web threat detection and digital trust intelligence platform."
     }
   ]
 }
