@@ -493,6 +493,11 @@ main > section { scroll-margin-top: calc(var(--header-h) + 16px); }
   letter-spacing: -0.025em;
   color: var(--ink-strong);
   text-decoration: none;
+  transition: color var(--t-fast);
+}
+
+.mobile-menu nav a:hover {
+  color: var(--signal-deep);
 }
 
 .mobile-menu nav a.is-active {
