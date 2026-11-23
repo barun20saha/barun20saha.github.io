@@ -246,7 +246,7 @@ function renderHeroProfile(profile) {
       if (portraitStage) portraitStage.classList.remove('is-fallback');
     };
     cutoutImg.onerror = () => {
-      portraitImg.src = profile.photo || 'assets/img/B_sphoto-1789478569220-5939.jpg';
+      portraitImg.src = profile.photo || 'assets/img/barun-saha.jpg';
       if (portraitStage) portraitStage.classList.add('is-fallback');
     };
     cutoutImg.src = 'assets/portrait-cutout.webp';
@@ -296,19 +296,7 @@ function renderAbout(profile, education) {
   if (!profile) return;
 
   if (statementEl && profile.bio) {
-    let bioHtml = escapeHTML(profile.bio);
-    const keyPhrases = [
-      'reliable and scalable software solutions',
-      'programming, data structures, databases, and modern development technologies',
-      'software engineering and application development'
-    ];
-    keyPhrases.forEach(phrase => {
-      const escaped = escapeHTML(phrase);
-      if (bioHtml.includes(escaped)) {
-        bioHtml = bioHtml.replace(escaped, `<strong class="phrase-bold">${escaped}</strong>`);
-      }
-    });
-    statementEl.innerHTML = `<p class="statement-text">${bioHtml}</p>`;
+    statementEl.innerHTML = `<p class="statement-text">${escapeHTML(profile.bio)}</p>`;
   }
 
   if (factsEl) {

@@ -274,21 +274,18 @@ main section { scroll-margin-top: calc(var(--header-h) + 16px); }
 }
 
 /* --------------------------------------------------------------------------
-   Section Header Pattern (title left, one plain sentence right, left-aligned text, never centred)
+   Section Header Pattern (title left, description immediately below, left-aligned)
    -------------------------------------------------------------------------- */
 .section-head {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--col-gap);
-  row-gap: var(--s-3);
-  align-items: end;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
   padding-bottom: var(--s-4);
   border-bottom: 1px solid var(--line);
   margin-bottom: var(--header-gap);
 }
 
 .section-head h2 {
-  grid-column: 1 / span 6;
   font-size: clamp(2rem, 1.2rem + 2.6vw, 3.25rem);
   font-weight: 700;
   line-height: 1.05;
@@ -299,20 +296,11 @@ main section { scroll-margin-top: calc(var(--header-h) + 16px); }
 
 .section-head p,
 .section-head .section-desc {
-  grid-column: 7 / -1;
   font-size: 1rem;
   color: var(--ink-soft);
   margin: 0;
   text-align: left;
   max-width: var(--measure);
-}
-
-@media (max-width: 899px) {
-  .section-head h2,
-  .section-head p,
-  .section-head .section-desc {
-    grid-column: 1 / -1;
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -626,12 +614,17 @@ html.menu-open {
 }
 
 .hero__stage, .hero-portrait-wrap {
-  grid-column: 7 / -1;
+  grid-column: 8 / -1;
   grid-row: 1;
   position: relative;
-  justify-self: end;
+  justify-self: center;
   align-self: center;
-  margin-left: -56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
   z-index: 2;
   pointer-events: none;
 }
@@ -669,32 +662,35 @@ html.menu-open {
   color: var(--ink-strong);
 }
 
-/* Sun Circle */
+/* Sun Circle (concentric with portrait, strictly contained) */
 .hero__sun, .hero-sun-circle {
   position: absolute;
-  inset: 50% 0 auto auto;
-  translate: 0 -50%;
-  inline-size: clamp(280px, 38vw, 760px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: clamp(280px, 32vw, 440px);
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--sun);
   z-index: 1;
-  transform: scale(0.85);
-  opacity: 0.9;
+  opacity: 0.92;
   transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .hero-online .hero__sun,
 .hero-online .hero-sun-circle {
-  transform: scale(1);
+  transform: translate(-50%, -50%) scale(1);
 }
 
 /* Portrait Stage */
 .hero-portrait-stage {
   position: relative;
   z-index: 2;
-  transform: translateY(24px);
-  opacity: 0.92;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(12px);
+  opacity: 0.95;
   transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 500ms ease;
 }
 
@@ -706,19 +702,31 @@ html.menu-open {
 .hero__portrait, .hero-portrait {
   position: relative;
   display: block;
-  inline-size: clamp(220px, 30vw, 620px);
-  height: auto;
-  filter: drop-shadow(0 20px 30px rgba(74, 74, 37, 0.22));
+  width: clamp(240px, 22vw, 320px);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--r-card);
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-md), 0 20px 40px -15px rgba(74, 74, 37, 0.28);
+  background: var(--surface);
 }
 
 .hero-portrait-stage.is-fallback .hero__portrait,
 .hero-portrait-stage.is-fallback .hero-portrait {
-  width: clamp(200px, 24vw, 240px);
-  height: clamp(200px, 24vw, 240px);
-  border-radius: 50%;
+  width: clamp(240px, 22vw, 320px);
+  height: auto;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-card);
   object-fit: cover;
-  border: 4px solid var(--surface);
-  box-shadow: var(--shadow-md);
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-md), 0 20px 40px -15px rgba(74, 74, 37, 0.28);
+}
+
+[data-theme="dark"] .hero__portrait,
+[data-theme="dark"] .hero-portrait {
+  border-color: var(--term-line);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
 }
 
 /* Terminal Window Component */
@@ -735,7 +743,6 @@ html.menu-open {
 .term pre, .term p, .terminal-body pre, .terminal-body p {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-}
 }
 
 .terminal-header {
@@ -933,14 +940,14 @@ html.menu-open {
     grid-column: 1 / -1;
     grid-row: auto;
     order: 2;
-    margin-left: 0;
-    justify-self: end;
+    margin: var(--s-6) auto 0;
+    justify-self: center;
   }
   .hero__sun, .hero-sun-circle {
-    inline-size: min(78vw, 360px);
+    width: clamp(240px, 55vw, 320px);
   }
   .hero__portrait, .hero-portrait {
-    inline-size: min(56vw, 260px);
+    width: clamp(200px, 45vw, 260px);
   }
 }
 
@@ -1242,10 +1249,16 @@ html.menu-open {
   border-top: 1px solid var(--line);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .skills-row {
-    grid-template-columns: 22% 1fr;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--col-gap);
+  }
+  .skills-row-name {
+    grid-column: 1 / span 4;
+  }
+  .skills-row-tags {
+    grid-column: 5 / -1;
   }
 }
 
@@ -1293,11 +1306,10 @@ html.menu-open {
    Projects Section (Dark Stage Band + Featured Slab + 2-Column Cards)
    -------------------------------------------------------------------------- */
 .projects-stage {
-  margin-inline: clamp(8px, 2vw, 24px);
-  padding-block: clamp(48px, 6vw, 84px);
+  margin-inline: 0;
+  padding-block: clamp(56px, 7vw, 96px);
   background: var(--term-bg);
-  border: 1px solid var(--term-line);
-  border-radius: var(--r-slab);
+  border-block: 1px solid var(--term-line);
   color: var(--term-text);
 }
 
@@ -1307,7 +1319,7 @@ html.menu-open {
 }
 
 .projects-stage__inner {
-  padding-inline: var(--gutter);
+  padding-inline: var(--gutter-l) var(--gutter-r);
 }
 
 .projects-stage .section-head {
@@ -1448,6 +1460,19 @@ html.menu-open {
   }
   .projects-grid > :last-child:nth-child(odd) {
     grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1000px) {
+  .projects-grid > :last-child:nth-child(odd).project-card {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: clamp(24px, 4vw, 44px);
+    align-items: center;
+    padding: clamp(20px, 3.5vw, 36px);
+  }
+  .projects-grid > :last-child:nth-child(odd) .project-cover-wrap {
+    margin-bottom: 0;
   }
 }
 
@@ -1659,8 +1684,8 @@ html.menu-open {
    -------------------------------------------------------------------------- */
 .profiles, .profiles-tiles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 380px));
+  gap: var(--col-gap);
 }
 
 .profile-tile {
