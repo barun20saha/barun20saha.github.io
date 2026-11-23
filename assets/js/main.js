@@ -658,66 +658,160 @@ function renderNews(newsList, containerOverride = null) {
 }
 
 /**
- * Render Terminal Bookend Footer
+ * Render Structured Full-Width Footer
  */
 function renderFooter(profile) {
+  if (!profile) return;
+
   const nameEl = document.getElementById('footer-name');
-  if (nameEl && profile?.name) {
-    nameEl.textContent = profile.name;
-  }
+  if (nameEl && profile.name) nameEl.textContent = profile.name;
 
-  const copyEl = document.getElementById('footer-copyright-year');
-  if (copyEl) {
-    copyEl.textContent = new Date().getFullYear();
-  }
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  const statementEl = document.getElementById('footer-statement');
-  if (statementEl && profile?.status) {
+  // CTA statement: if starts with "Open to ", split light & bold; else all bold
+  const ctaTitle = document.getElementById('footer-cta-title');
+  if (ctaTitle && profile.status) {
     const raw = profile.status;
-    let lightPart = 'Open to';
-    let boldPart = 'software engineering internships.';
+    let lightPart = '';
+    let boldPart = raw;
     if (raw.toLowerCase().startsWith('open to')) {
       lightPart = 'Open to';
       boldPart = raw.substring(7).trim();
-    } else {
-      const words = raw.split(' ');
-      if (words.length > 2) {
-        lightPart = words.slice(0, 2).join(' ');
-        boldPart = words.slice(2).join(' ');
-      } else {
-        boldPart = raw;
-        lightPart = '';
-      }
     }
-    statementEl.innerHTML = `
-      ${lightPart ? `<span class="phrase-light">${escapeHTML(lightPart)}</span>` : ''}
-      <span class="phrase-bold">${escapeHTML(boldPart)}</span>
+    ctaTitle.innerHTML = `
+      ${lightPart ? `<span class="footer-cta__light">${escapeHTML(lightPart)}</span>` : ''}
+      <strong class="footer-cta__bold">${escapeHTML(boldPart)}</strong>
     `;
   }
 
-  const emailBtn = document.getElementById('footer-email-btn');
-  if (emailBtn && profile?.socials) {
-    const emailObj = profile.socials.find(s => s.platform.toLowerCase().includes('mail'));
-    if (emailObj && emailObj.url) {
-      const mailto = emailObj.url.startsWith('mailto:') ? emailObj.url : 'mailto:' + emailObj.url;
-      emailBtn.href = mailto;
-    }
+  // Footer status bottom
+  const footerStatusText = document.getElementById('footer-status-text');
+  if (footerStatusText && profile.status) {
+    footerStatusText.textContent = profile.status;
   }
 
-  const socialsContainer = document.getElementById('footer-socials');
-  if (socialsContainer && Array.isArray(profile?.socials)) {
-    socialsContainer.innerHTML = profile.socials.map(s => {
-      const iconSvg = getSocialIconSvg(s.platform);
-      let href = s.url || '';
-      if (s.platform.toLowerCase().includes('mail') && !href.startsWith('mailto:')) {
-        href = 'mailto:' + href;
+  // Location
+  const locText = document.getElementById('footer-loc-text');
+  if (locText && profile.location) {
+    locText.textContent = profile.location;
+  }
+
+  // Email link & buttons
+  const emailObj = (profile.socials || []).find(s => s.platform.toLowerCase().includes('mail') || (s.url && s.url.includes('@')));
+  const emailAddress = emailObj ? emailObj.url.replace(/^mailto:/, '') : 'barun20.saha@gmail.com';
+  const mailto = 'mailto:' + emailAddress;
+
+  const emailBtn = document.getElementById('footer-email-btn');
+  if (emailBtn) emailBtn.href = mailto;
+
+  const emailLink = document.getElementById('footer-email');
+  if (emailLink) {
+    emailLink.href = mailto;
+    emailLink.textContent = emailAddress;
+  }
+
+  const copyBtn = document.getElementById('copy-email');
+  if (copyBtn) copyBtn.dataset.email = emailAddress;
+
+  // Resume buttons
+  const resumeBtn = document.getElementById('footer-resume-btn');
+  if (resumeBtn && profile.resumeUrl) resumeBtn.href = profile.resumeUrl;
+
+  const sitemapResume = document.getElementById('footer-sitemap-resume');
+  if (sitemapResume && profile.resumeUrl) sitemapResume.href = profile.resumeUrl;
+
+  // Social rows
+  const socialList = document.getElementById('footer-socials-list');
+  if (socialList && Array.isArray(profile.socials)) {
+    const onlineSocials = profile.socials.filter(s => !s.platform.toLowerCase().includes('mail'));
+    socialList.innerHTML = onlineSocials.map(s => {
+      let handle = s.username ? (s.username.startsWith('@') ? s.username : '@' + s.username) : '';
+      if (!handle && s.url) {
+        try {
+          const path = new URL(s.url).pathname.replace(/^\/|\/$/g, '');
+          handle = path ? '/' + path : '';
+        } catch (e) {}
       }
       return `
-        <a href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="${escapeHTML(s.platform)}" aria-label="${escapeHTML(s.platform)} (opens in a new tab)">
-          ${iconSvg}
-        </a>
+        <li><a href="${escapeHTML(s.url)}" target="_blank" rel="noopener noreferrer">
+          ${window.Icons ? window.Icons.svg(window.Icons.forUrl(s.url), { size: 20 }) : ''}
+          <span class="footer-social__name">${escapeHTML(s.platform)}</span>
+          <span class="footer-social__handle">${escapeHTML(handle)}</span>
+          ${window.Icons ? window.Icons.svg('arrow-up-right', { size: 16 }) : ''}
+        </a></li>
       `;
     }).join('');
+  }
+
+  // Footer behavior (copy email, local time, back to top)
+  initFooterBehavior(profile);
+}
+
+function initFooterBehavior(profile) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // local time in owner's timezone (data-tz, default Asia/Kolkata)
+  const t = document.getElementById('local-time');
+  if (t) {
+    const tz = (profile && profile.timezone) || t.dataset.tz || 'Asia/Kolkata';
+    t.dataset.tz = tz;
+    const city = (tz.split('/')[1] || '').replace(/_/g, ' ');
+    const fmt = new Intl.DateTimeFormat('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz, timeZoneName: 'short' });
+    const tick = () => {
+      const d = new Date();
+      t.textContent = fmt.format(d) + (city ? ' in ' + city : '');
+      t.dateTime = d.toISOString();
+    };
+    tick();
+    setInterval(tick, 30000);
+  }
+
+  // copy email
+  const copy = document.getElementById('copy-email');
+  if (copy && !copy.dataset.bound) {
+    copy.dataset.bound = 'true';
+    const label = copy.querySelector('span');
+    copy.addEventListener('click', async () => {
+      const email = copy.dataset.email || 'barun20.saha@gmail.com';
+      try {
+        await navigator.clipboard.writeText(email);
+        label.textContent = 'Copied';
+        if (window.Icons) {
+          const svgEl = copy.querySelector('svg');
+          if (svgEl) svgEl.outerHTML = window.Icons.svg('check', { size: 16 });
+        }
+      } catch {
+        const a = document.getElementById('footer-email');
+        if (a) {
+          const r = document.createRange(); r.selectNodeContents(a);
+          const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+        }
+        label.textContent = 'Press Ctrl or Cmd + C';
+      }
+      setTimeout(() => {
+        label.textContent = 'Copy email';
+        if (window.Icons) {
+          const svgEl = copy.querySelector('svg');
+          if (svgEl) svgEl.outerHTML = window.Icons.svg('copy', { size: 16 });
+        }
+      }, 2000);
+    });
+  }
+
+  // back to top
+  const topBtn = document.getElementById('back-to-top');
+  if (topBtn && !topBtn.dataset.bound) {
+    topBtn.dataset.bound = 'true';
+    topBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      const topTarget = document.getElementById('top') || document.getElementById('hero');
+      if (topTarget) {
+        topTarget.setAttribute('tabindex', '-1');
+        topTarget.focus({ preventScroll: true });
+      }
+    });
   }
 }
 
