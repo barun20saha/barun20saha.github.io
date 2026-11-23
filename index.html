@@ -102,7 +102,7 @@
   </div>
 
   <!-- Loading & Error Fallbacks -->
-  <div class="container">
+  <div class="wrap">
     <div id="loading-indicator" class="loading-indicator" role="status" aria-live="polite">
       <div class="loading-spinner"></div>
       <p style="font-family: var(--font-mono); color: var(--muted); font-size: 0.9rem;">$ loading profile data...</p>
@@ -207,37 +207,33 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="section" aria-labelledby="about-heading">
-      <div class="container">
-        <header class="section-head">
-          <h2 id="about-heading">About</h2>
-          <p class="section-desc">Background, current studies and software focus.</p>
-        </header>
-        <div class="about-layout">
-          <div id="about-bio-statement" class="about-statement"></div>
-          <div class="about-facts-wrap">
-            <div id="about-facts-block" class="facts-code-block" role="region" aria-label="Key Facts"></div>
-          </div>
+    <section id="about" class="section wrap" aria-labelledby="about-heading">
+      <header class="section-head">
+        <h2 id="about-heading">About</h2>
+        <p class="section-desc">Background, current studies and software focus.</p>
+      </header>
+      <div class="about-grid">
+        <div id="about-bio-statement" class="about-grid__statement about-statement"></div>
+        <div class="about-grid__facts">
+          <div id="about-facts-block" class="facts-code-block" role="region" aria-label="Key Facts"></div>
         </div>
       </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="section" aria-labelledby="skills-heading">
-      <div class="container">
-        <header class="section-head">
-          <h2 id="skills-heading">Skills</h2>
-          <p class="section-desc">The languages, tools and fundamentals I work with.</p>
-        </header>
-        <div id="skills-grid" class="skills-rows">
-          <!-- Injected via JS as definition rows -->
-        </div>
+    <section id="skills" class="section wrap" aria-labelledby="skills-heading">
+      <header class="section-head">
+        <h2 id="skills-heading">Skills</h2>
+        <p class="section-desc">The languages, tools and fundamentals I work with.</p>
+      </header>
+      <div id="skills-grid" class="skills-rows">
+        <!-- Injected via JS as definition rows -->
       </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="section" aria-labelledby="projects-heading">
-      <div class="container">
+    <section id="projects" class="section projects-stage" aria-labelledby="projects-heading">
+      <div class="projects-stage__inner">
         <header class="section-head">
           <h2 id="projects-heading">Projects</h2>
           <p class="section-desc">Systems and applications I have built.</p>
@@ -248,93 +244,83 @@
       </div>
     </section>
 
-    <!-- Experience Section -->
-    <section id="experience" class="section" aria-labelledby="experience-heading">
-      <div class="container">
-        <header class="section-head">
+    <!-- Experience & Education Paired Section -->
+    <div class="wrap pair">
+      <section id="experience" class="section" aria-labelledby="experience-heading">
+        <header class="pair-head">
           <h2 id="experience-heading">Experience</h2>
           <p class="section-desc">Internships, industry roles and research work.</p>
         </header>
         <div id="experience-timeline" class="timeline">
           <!-- Experience timeline injected via JS -->
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Education Section -->
-    <section id="education" class="section" aria-labelledby="education-heading">
-      <div class="container">
-        <header class="section-head">
+      <section id="education" class="section" aria-labelledby="education-heading">
+        <header class="pair-head">
           <h2 id="education-heading">Education</h2>
           <p class="section-desc">Academic qualifications and coursework.</p>
         </header>
         <div id="education-timeline" class="timeline">
           <!-- Education items injected via JS -->
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
     <!-- Achievements & Certifications Section -->
-    <section id="achievements" class="section" aria-labelledby="achievements-heading">
-      <div class="container">
-        <header class="section-head">
-          <h2 id="achievements-heading">Achievements</h2>
-          <p class="section-desc">Milestones, hackathons and certifications.</p>
-        </header>
-        <div class="creds-grid">
-          <div class="creds-column">
-            <h3 class="creds-column-title">
-              <svg class="icon icon--stroke" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /><circle cx="12" cy="8" r="6" /></svg>
-              Key milestones
-            </h3>
-            <div id="achievements-ledger" class="ledger-card">
-              <!-- Achievements injected via JS -->
-            </div>
+    <section id="achievements" class="section wrap" aria-labelledby="achievements-heading">
+      <header class="section-head">
+        <h2 id="achievements-heading">Achievements</h2>
+        <p class="section-desc">Milestones, hackathons and certifications.</p>
+      </header>
+      <div class="creds-grid">
+        <div class="creds-column">
+          <h3 class="creds-column-title">
+            <svg class="icon icon--stroke" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /><circle cx="12" cy="8" r="6" /></svg>
+            Key milestones
+          </h3>
+          <div id="achievements-ledger" class="ledger-card">
+            <!-- Achievements injected via JS -->
           </div>
+        </div>
 
-          <div class="creds-column">
-            <h3 class="creds-column-title">
-              <svg class="icon icon--stroke" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
-              Certifications &amp; training
-            </h3>
-            <div id="certifications-ledger" class="ledger-card">
-              <!-- Certifications injected via JS -->
-            </div>
+        <div class="creds-column">
+          <h3 class="creds-column-title">
+            <svg class="icon icon--stroke" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
+            Certifications &amp; training
+          </h3>
+          <div id="certifications-ledger" class="ledger-card">
+            <!-- Certifications injected via JS -->
           </div>
         </div>
       </div>
     </section>
 
     <!-- Coding Profiles Section -->
-    <section id="profiles" class="section" aria-labelledby="profiles-heading">
-      <div class="container">
-        <header class="section-head">
-          <h2 id="profiles-heading">Profiles</h2>
-          <p class="section-desc">Problem solving and open-source handles.</p>
-        </header>
-        <div id="coding-profiles-grid" class="profiles-tiles-grid">
-          <!-- Coding profile stat cards injected via JS -->
-        </div>
+    <section id="profiles" class="section wrap" aria-labelledby="profiles-heading">
+      <header class="section-head">
+        <h2 id="profiles-heading">Profiles</h2>
+        <p class="section-desc">Problem solving and open-source handles.</p>
+      </header>
+      <div id="coding-profiles-grid" class="profiles profiles-tiles-grid">
+        <!-- Coding profile stat cards injected via JS -->
       </div>
     </section>
 
-    <!-- Extracurricular Section -->
-    <section id="extracurricular-section" class="section" aria-labelledby="activities-heading">
-      <div class="container">
-        <header class="section-head">
+    <!-- Activities & News Paired Section -->
+    <div class="wrap pair">
+      <section id="activities" class="section" aria-labelledby="activities-heading">
+        <header class="pair-head">
           <h2 id="activities-heading">Activities</h2>
           <p class="section-desc">Leadership and community involvement.</p>
         </header>
         <div id="extracurricular-list" class="activities-list">
           <!-- Extracurricular items injected via JS -->
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- News / Timeline Section -->
-    <section id="news" class="section" aria-labelledby="news-heading">
-      <div class="container">
-        <header class="section-head">
+      <section id="news" class="section" aria-labelledby="news-heading">
+        <header class="pair-head">
           <h2 id="news-heading">News</h2>
           <p class="section-desc">Recent milestones and project changelog.</p>
         </header>
@@ -346,8 +332,8 @@
             <button id="btn-news-expand" class="btn-news-expand">Show older updates</button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
   </main>
 

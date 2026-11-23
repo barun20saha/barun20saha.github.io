@@ -232,8 +232,42 @@ button, input, textarea, select {
   padding-bottom: 80px;
 }
 
-main > section + section { margin-top: var(--section-gap); }
-main > section { scroll-margin-top: calc(var(--header-h) + 16px); }
+main > section + section,
+main > .pair + section,
+main > section + .pair,
+main > .pair + .pair {
+  margin-top: var(--section-gap);
+}
+main section { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--section-gap) var(--col-gap);
+}
+@media (min-width: 1100px) {
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pair-head {
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--header-gap);
+}
+.pair-head h2 {
+  margin: 0 0 var(--s-2);
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  font-weight: 700;
+  color: var(--ink-strong);
+}
+.pair-head p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  max-width: var(--measure);
+}
 
 .section {
   padding-block: 0;
@@ -1021,25 +1055,30 @@ html.menu-open {
   border-color: var(--ink-strong);
   color: var(--bg);
 }
-  justify-content: center;
-  color: var(--ink);
-  transition: all var(--transition-fast);
-}
-
-.social-icon-btn:hover {
-  border-color: var(--accent-teal);
-  color: var(--accent-teal);
-  background-color: var(--accent-teal-soft);
-}
 
 /* --------------------------------------------------------------------------
-   About Section (7 / 5 Layout: Statement + Facts Code Block)
+   About Section (12-Col Layout: Statement 8 cols + Facts 4 cols sticky)
    -------------------------------------------------------------------------- */
-.about-layout {
+.about-grid, .about-layout {
   display: grid;
-  grid-template-columns: 7fr 5fr;
-  gap: var(--s-7);
+  grid-template-columns: 1fr;
+  gap: var(--s-6);
   align-items: start;
+}
+@media (min-width: 1100px) {
+  .about-grid, .about-layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+  }
+  .about-grid__statement, .about-statement {
+    grid-column: 1 / span 8;
+  }
+  .about-grid__facts, .about-facts-wrap {
+    grid-column: 9 / -1;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+    align-self: start;
+  }
 }
 
 .about-statement .statement-text {
@@ -1211,8 +1250,8 @@ html.menu-open {
 
 .skills-row {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: var(--s-5);
+  grid-template-columns: 1fr;
+  gap: var(--s-3);
   align-items: baseline;
   padding-block: 22px;
   border-bottom: 1px solid var(--line);
@@ -1220,6 +1259,13 @@ html.menu-open {
 
 .skills-row:first-child {
   border-top: 1px solid var(--line);
+}
+
+@media (min-width: 768px) {
+  .skills-row {
+    grid-template-columns: 22% 1fr;
+    column-gap: var(--col-gap);
+  }
 }
 
 .skills-row-name h3 {
@@ -1239,7 +1285,7 @@ html.menu-open {
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 14px;
   color: var(--ink);
   background: var(--surface);
   border: 1px solid var(--line);
@@ -1255,16 +1301,46 @@ html.menu-open {
   background-color: var(--signal-wash);
 }
 
-@media (max-width: 640px) {
-  .skills-row {
-    grid-template-columns: 1fr;
-    gap: var(--s-3);
-  }
+.skills-row:first-of-type .skill-tag {
+  background: var(--signal-wash);
+  border-color: color-mix(in srgb, var(--signal) 40%, transparent);
+  color: var(--signal-deep);
+  font-weight: 500;
 }
 
 /* --------------------------------------------------------------------------
-   Projects Section (Featured Slab + 2-Column Cards)
+   Projects Section (Dark Stage Band + Featured Slab + 2-Column Cards)
    -------------------------------------------------------------------------- */
+.projects-stage {
+  margin-inline: clamp(8px, 2vw, 24px);
+  padding-block: clamp(48px, 6vw, 84px);
+  background: var(--term-bg);
+  border: 1px solid var(--term-line);
+  border-radius: var(--r-slab);
+  color: var(--term-text);
+}
+
+[data-theme="dark"] .projects-stage {
+  background: #0B0E13;
+  border-color: #262C3A;
+}
+
+.projects-stage__inner {
+  padding-inline: var(--gutter);
+}
+
+.projects-stage .section-head {
+  border-bottom-color: var(--term-line);
+}
+
+.projects-stage .section-head h2 {
+  color: #FFFFFF;
+}
+
+.projects-stage .section-head p {
+  color: var(--term-dim);
+}
+
 .projects-layout {
   display: flex;
   flex-direction: column;
@@ -1273,16 +1349,22 @@ html.menu-open {
 
 /* Featured Project Full-Width Slab */
 .featured-slab {
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--term-bar);
+  border: 1px solid var(--term-line);
   border-radius: var(--r-slab);
   box-shadow: var(--shadow-md);
   padding: clamp(20px, 3.5vw, 36px);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: clamp(24px, 4vw, 44px);
   align-items: center;
   position: relative;
+}
+
+@media (min-width: 1100px) {
+  .featured-slab {
+    grid-template-columns: 7fr 5fr;
+  }
 }
 
 .featured-cover-wrap {
@@ -1322,13 +1404,13 @@ html.menu-open {
 .featured-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--ink-strong);
+  color: #FFFFFF;
   line-height: 1.2;
   margin: 0;
 }
 
 .featured-desc {
-  color: var(--ink-soft);
+  color: var(--term-dim);
   font-size: 1.0625rem;
   line-height: 1.6;
   margin: 0;
@@ -1358,30 +1440,39 @@ html.menu-open {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 500;
-  background: var(--surface);
-  color: var(--ink-strong);
-  border: 1px solid var(--line);
+  background: var(--term-bg);
+  color: var(--term-text);
+  border: 1px solid var(--term-line);
   border-radius: var(--r-pill);
   text-decoration: none;
   transition: all var(--t-fast);
 }
 
 .btn-project:hover {
-  background: var(--ink-strong);
-  color: var(--bg);
-  border-color: var(--ink-strong);
+  background: var(--term-text);
+  color: var(--term-bg);
+  border-color: var(--term-text);
 }
 
 /* Two-Column Grid for Non-Featured Projects */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--s-6);
+  grid-template-columns: 1fr;
+  gap: var(--col-gap);
+}
+
+@media (min-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .projects-grid > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 }
 
 .project-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--term-bar);
+  border: 1px solid var(--term-line);
   border-radius: var(--r-card);
   box-shadow: var(--shadow-sm);
   padding: 24px;
@@ -1411,16 +1502,27 @@ html.menu-open {
 .project-card .project-title {
   font-size: 1.375rem;
   font-weight: 650;
-  color: var(--ink-strong);
+  color: #FFFFFF;
   margin: 0;
 }
 
 .project-card .project-desc {
   font-size: 0.9375rem;
-  color: var(--ink-soft);
+  color: var(--term-dim);
   line-height: 1.55;
   flex: 1;
   margin: 0;
+}
+
+.projects-stage .tech-tag {
+  background: var(--term-bg);
+  border-color: var(--term-line);
+  color: var(--term-text);
+}
+
+.projects-stage .tech-tag:hover {
+  border-color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 20%, transparent);
 }
 
 /* Per-Project Terminal Cover */
@@ -1572,12 +1674,12 @@ html.menu-open {
 }
 
 /* --------------------------------------------------------------------------
-   Coding Profiles Section (3 Equal Interactive Tiles)
+   Coding Profiles Section (Interactive Tiles Auto-Fit Grid)
    -------------------------------------------------------------------------- */
-.profiles-tiles-grid {
+.profiles, .profiles-tiles-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--s-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--s-4);
 }
 
 .profile-tile {
@@ -1636,12 +1738,6 @@ html.menu-open {
   padding: 4px 12px;
   border-radius: var(--r-pill);
   margin-top: 8px;
-}
-
-@media (max-width: 860px) {
-  .profiles-tiles-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* --------------------------------------------------------------------------
